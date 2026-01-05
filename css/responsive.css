@@ -1,15 +1,22 @@
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  padding: 2rem;
+  display: flex;         /* horizontal layout */
+  gap: 1rem;             /* space between thumbnails */
+  overflow-x: auto;      /* scroll if too wide */
+  scroll-behavior: smooth;
+  padding: 1rem 0;
 }
 
+/* Ensure thumbnails don’t shrink */
 .gallery img {
-  width: 100%;
-  border-radius: 12px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex: 0 0 auto;        /* prevents shrinking, keeps width */
+  width: 180px;           /* thumbnail width */
+  height: 120px;          /* thumbnail height */
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
+
 
 .gallery img:hover {
   transform: scale(1.03);
@@ -69,5 +76,12 @@
 @media (min-width: 1025px) and (max-width: 1440px) {
   .gallery {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery {
+    display: flex !important;
+    flex-direction: row;
   }
 }
