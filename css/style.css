@@ -1,0 +1,335 @@
+:root {
+  --bg-dark: #0b0f1a;
+  --bg-light: #111827;
+  --accent: #8b5cf6;
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top, #1e1b4b, #020617);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.navbar a {
+  color: var(--text-main);
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  color: var(--accent);
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.15;
+  z-index: -1;
+}
+.pricing {
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.card h3 {
+  color: var(--accent);
+}
+#starfield {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Make the canvas fill the screen */
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* keep behind content */
+}
+
+
+/* Optional: disable on very small screens */
+@media (max-width: 480px) {
+  #starfield {
+    display: none;
+  }
+}
+#ambience-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(196, 181, 253, 0.4);
+  color: #e5e7eb;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+#ambience-toggle:hover {
+  background: rgba(196, 181, 253, 0.15);
+}
+#nebula-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* sits above the canvas but behind your content */
+  pointer-events: none;
+
+  /* subtle galaxy gradient */
+  background: radial-gradient(circle at 30% 30%, rgba(139,92,246,0.15), transparent 60%),
+              radial-gradient(circle at 70% 70%, rgba(59,130,246,0.1), transparent 50%),
+              radial-gradient(circle at 50% 50%, rgba(236,72,153,0.08), transparent 70%);
+
+  /* optional slight movement for extra depth */
+  animation: nebulaShift 120s linear infinite;
+}
+
+/* Gentle, slow movement to mimic drifting nebula */
+@keyframes nebulaShift {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(30px, 15px) scale(1.02); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* Category section styling */
+.category {
+  padding: 4rem 2rem;
+  border-top: 1px solid rgba(196,181,253,0.2);
+  border-bottom: 1px solid rgba(196,181,253,0.2);
+  backdrop-filter: blur(4px);
+  margin: 2rem 0;
+}
+
+/* Category headings */
+.category h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+
+  /* Gradient text */
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; /* makes the gradient visible */
+
+  /* Optional glow */
+  text-shadow: 0 0 6px rgba(139,92,246,0.4);
+}
+
+
+/* Gallery grid */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Individual images */
+.gallery img {
+  width: 100%;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(139,92,246,0.4);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+/* Wrapper with arrows */
+.gallery-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Scrollable gallery */
+.gallery {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Hide scrollbar */
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+.gallery {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Horizontal thumbnail gallery */
+.gallery {
+  display: flex;           /* arrange children in a row */
+  gap: 1rem;               /* space between thumbnails */
+  overflow-x: auto;        /* scrollable if too wide */
+  padding: 1rem 0;         /* vertical padding */
+  scroll-behavior: smooth; /* smooth scrolling when using arrows */
+}
+
+/* Optional: hide scrollbar on modern browsers */
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+.gallery {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none;    /* Firefox */
+}
+
+/* Thumbnails */
+.gallery img {
+  flex: 0 0 auto;      /* prevent shrinking, keep width */
+  width: 180px;        /* thumbnail width */
+  height: 120px;       /* thumbnail height */
+  object-fit: cover;   /* crop to fit container */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(139,92,246,0.4);
+}
+
+
+/* Scroll arrows */
+.scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;       /* remove background circle */
+  border: none;           /* remove border */
+  color: white;           /* simple white arrow */
+  font-size: 2rem;        /* adjust size */
+  padding: 0;             /* remove extra padding */
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s;
+}
+
+.scroll-arrow:hover {
+  color: #ff77ff; /* or any soft cosmic glow */
+}
+
+
+.scroll-arrow:hover {
+  color: #8b5cf6;         /* optional: glow color on hover */
+}
+
+.scroll-arrow.left {
+  left: 0.3rem;           /* small offset from left */
+}
+
+.scroll-arrow.right {
+  right: 0.3rem;          /* small offset from right */
+}
+
+/* Footer */
+
+#site-footer {
+  position: fixed;
+  bottom: 1rem; /* float slightly above the bottom */
+  left: 50%;
+  transform: translateX(-50%); /* center horizontally */
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.8rem 2rem;
+
+  background: rgba(10, 10, 30, 0.45); /* deep night blue, semi-transparent */
+  backdrop-filter: blur(10px);        /* glassy blur effect */
+  border-radius: 12px;                /* rounded for floating card feel */
+  
+  color: #ffffff;
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+  z-index: 10;
+
+  /* subtle cosmic glow */
+  box-shadow: 0 0 15px rgba(139,92,246,0.3),
+              0 0 10px rgba(217,70,239,0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Optional subtle hover lift */
+#site-footer:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 0 20px rgba(139,92,246,0.5),
+              0 0 15px rgba(217,70,239,0.3);
+}
+
+@keyframes footerTwinkleScale {
+  0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+  50% { transform: translateX(-50%) translateY(-1px) scale(1.02); }
+}
+
+#site-footer {
+  animation: footerTwinkle 4s ease-in-out infinite alternate,
+             footerTwinkleScale 4s ease-in-out infinite alternate;
+}
+
+
+/* Ambience toggle button */
+#ambience-toggle {
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-shadow: 0 0 2px rgba(0,0,0,0.2);
+}
+
+#ambience-toggle:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(139,92,246,0.6),
+              0 0 6px rgba(217,70,239,0.4);
+}
