@@ -220,6 +220,7 @@ html {
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
+  flex-shrink: 0; /* CRUCIAL for horizontal scroll */
 }
 
 .gallery img:hover {
