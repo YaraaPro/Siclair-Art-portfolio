@@ -93,6 +93,16 @@
     font-size: 0.85rem;
   }
 
+    #site-footer {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  #site-footer.hidden {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+    pointer-events: none;
+  }
+
   #ambience-toggle {
     padding: 0.25rem 0.5rem;
     font-size: 0.8rem;

@@ -10,9 +10,10 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
-// ===== GLOBAL STATE =====
-let prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// ===== MOTION PREFERENCE =====
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// ===== AMBIENCE TOGGLE =====
 const toggleButton = document.getElementById("ambience-toggle");
 let ambienceEnabled = true;
 
@@ -21,19 +22,17 @@ toggleButton.addEventListener("click", () => {
 
   toggleButton.textContent = ambienceEnabled
     ? "✨ Ambience: On"
-    : " Ambience: Off";
+    : "🌙 Ambience: Off";
 
   toggleButton.setAttribute("aria-pressed", ambienceEnabled);
-
-  canvas.style.display = ambienceEnabled ? "block" : "none";
 });
 
-// Star setup
-const STAR_COUNT = prefersReducedMotion ? 50 : 180;
+// ===== STAR SETUP =====
+const STAR_COUNT = prefersReducedMotion ? 60 : 180;
 const colors = [
-  "rgba(255,255,255,0.8)",   // white
-  "rgba(173,216,230,0.8)",   // soft blue
-  "rgba(196,181,253,0.8)"    // soft purple
+  "rgba(255,255,255,0.8)",
+  "rgba(173,216,230,0.8)",
+  "rgba(196,181,253,0.8)"
 ];
 
 const stars = Array.from({ length: STAR_COUNT }, () => ({
@@ -42,47 +41,52 @@ const stars = Array.from({ length: STAR_COUNT }, () => ({
   radius: Math.random() * 1.4 + 0.2,
   vx: (Math.random() - 0.5) * 0.05,
   vy: (Math.random() - 0.5) * 0.05,
-  alpha: Math.random(),
+  alpha: Math.random() * 0.6 + 0.4,
   alphaSpeed: Math.random() * 0.005 + 0.002,
   color: colors[Math.floor(Math.random() * colors.length)]
 }));
 
-
-// ===== ANIMATION =====
-function animate() {
+// ===== DRAW STARS (STATIC) =====
+function drawStars(staticMode = false) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   stars.forEach(star => {
-    // Move star gently
-    star.x += star.vx;
-    star.y += star.vy;
+    if (!staticMode) {
+      // Move stars gently
+      star.x += star.vx;
+      star.y += star.vy;
 
-    // Wrap edges
-    if (star.x < 0) star.x = canvas.width;
-    if (star.x > canvas.width) star.x = 0;
-    if (star.y < 0) star.y = canvas.height;
-    if (star.y > canvas.height) star.y = 0;
+      // Wrap edges
+      if (star.x < 0) star.x = canvas.width;
+      if (star.x > canvas.width) star.x = 0;
+      if (star.y < 0) star.y = canvas.height;
+      if (star.y > canvas.height) star.y = 0;
 
-    // Twinkle
-    star.alpha += star.alphaSpeed;
-    if (star.alpha <= 0.3 || star.alpha >= 1) star.alphaSpeed *= -1;
+      // Twinkle
+      star.alpha += star.alphaSpeed;
+      if (star.alpha <= 0.3 || star.alpha >= 1) star.alphaSpeed *= -1;
+    }
 
-    // Draw
     ctx.beginPath();
     ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
     ctx.fillStyle = star.color.replace("0.8", star.alpha.toFixed(2));
-
-    // Glow
     ctx.shadowBlur = 6;
     ctx.shadowColor = star.color.replace("0.8", (star.alpha / 2).toFixed(2));
-
     ctx.fill();
   });
-
-  requestAnimationFrame(animate);
 }
 
-// Start animation
+// ===== ANIMATION LOOP =====
+function animate() {
+  if (ambienceEnabled && !prefersReducedMotion) {
+    drawStars(false); // animated
+    requestAnimationFrame(animate);
+  } else {
+    drawStars(true); // static
+  }
+}
+
+// ===== START =====
 animate();
 
 
@@ -145,3 +149,19 @@ lightbox.addEventListener("click", e => {
   }
 });
 
+let lastScrollY = window.scrollY;
+const footer = document.getElementById("site-footer");
+
+window.addEventListener("scroll", () => {
+  if (window.innerWidth > 600) return; // mobile only
+
+  if (window.scrollY > lastScrollY + 10) {
+    // scrolling down → hide
+    footer.classList.add("hidden");
+  } else if (window.scrollY < lastScrollY - 10) {
+    // scrolling up → show
+    footer.classList.remove("hidden");
+  }
+
+  lastScrollY = window.scrollY;
+});
