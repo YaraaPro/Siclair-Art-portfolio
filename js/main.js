@@ -113,47 +113,41 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   });
 });
 
-// Create lightbox container
-const lightbox = document.createElement("div");
-lightbox.id = "lightbox";
-document.body.appendChild(lightbox);
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.querySelector(".lightbox-image");
+const leftText = document.querySelector(".lightbox-text.left");
+const rightText = document.querySelector(".lightbox-text.right");
+const closeBtn = document.querySelector(".lightbox-close");
 
-lightbox.style.cssText = `
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  justify-content:center;
-  align-items:center;
-  opacity:0;
-  pointer-events:none;
-  transition: opacity 0.3s;
-  z-index:1000;
-`;
-
-const lightboxImg = document.createElement("img");
-lightboxImg.style.maxWidth = "90%";
-lightboxImg.style.maxHeight = "90%";
-lightboxImg.style.borderRadius = "10px";
-lightbox.appendChild(lightboxImg);
-
-// Click thumbnail
-document.querySelectorAll(".gallery img").forEach(img => {
+// Open lightbox
+document.querySelectorAll(".thumb").forEach(img => {
   img.addEventListener("click", () => {
-    lightboxImg.src = img.dataset.full;
-    lightbox.style.opacity = "1";
-    lightbox.style.pointerEvents = "all";
+    lightboxImg.src = img.src;
+    leftText.innerHTML = img.dataset.left || "";
+    rightText.innerHTML = img.dataset.right || "";
+    lightbox.classList.remove("hidden");
   });
 });
 
-// Click outside image to close
+// Close button
+closeBtn.addEventListener("click", () => {
+  lightbox.classList.add("hidden");
+});
+
+// Click backdrop to close
 lightbox.addEventListener("click", e => {
-  if (e.target !== lightboxImg) {
-    lightbox.style.opacity = "0";
-    lightbox.style.pointerEvents = "none";
+  if (e.target === lightbox) {
+    lightbox.classList.add("hidden");
   }
 });
+
+// Escape key to close (optional but ✨)
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    lightbox.classList.add("hidden");
+  }
+});
+
 
 let lastScrollY = window.scrollY;
 const footer = document.getElementById("site-footer");
