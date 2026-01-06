@@ -330,3 +330,39 @@ html {
   box-shadow: 0 0 12px rgba(139,92,246,0.6),
               0 0 6px rgba(217,70,239,0.4);
 }
+@media (max-width: 600px) {
+  #site-footer {
+    width: calc(100% - 1.5rem);   /* wide, not tall */
+    max-width: 420px;
+
+    bottom: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    gap: 0.6rem;
+
+    font-size: 0.8rem;
+    line-height: 1.2;
+
+    justify-content: space-between;
+    text-align: left;
+
+    border-radius: 10px;
+
+    /* tame the animations on mobile */
+    animation: footerTwinkle 6s ease-in-out infinite alternate;
+  }
+
+  #site-footer p {
+    max-width: 65%;
+    margin: 0;
+  }
+
+  #ambience-toggle {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* Remove hover lift on touch devices */
+  #site-footer:hover {
+    transform: translateX(-50%);
+  }
+}
