@@ -78,13 +78,19 @@ function drawStars(staticMode = false) {
 
 // ===== ANIMATION LOOP =====
 function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   if (ambienceEnabled && !prefersReducedMotion) {
     drawStars(false); // animated
-    requestAnimationFrame(animate);
   } else {
-    drawStars(true); // static
+    drawStars(true);  // static
   }
+
+  requestAnimationFrame(animate);
 }
+
+animate();
+
 
 // ===== START =====
 animate();

@@ -82,12 +82,32 @@
 }
 
   #site-footer {
-    bottom: 0.5rem;          /* closer to bottom */
-    padding: 0.5rem 1rem;    /* MUCH smaller padding */
+    width: calc(100% - 2rem);   /* wide */
+    max-width: 420px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    padding: 0.4rem 0.8rem;
+    flex-direction: row;        /* NOT column */
+    justify-content: space-between;
+    align-items: center;
     gap: 0.6rem;
-    font-size: 0.85rem;
-    border-radius: 10px;
+
+    font-size: 0.8rem;
+    line-height: 1.2;
   }
+
+  #site-footer p {
+    max-width: 65%;
+    white-space: normal;
+  }
+
+  #ambience-toggle {
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
 
   #site-footer p {
     font-size: 0.85rem;
@@ -101,11 +121,6 @@
     opacity: 0;
     transform: translate(-50%, 10px);
     pointer-events: none;
-  }
-
-  #ambience-toggle {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
   }
 
 
