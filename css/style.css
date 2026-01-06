@@ -214,8 +214,8 @@ html {
 /* Thumbnails */
 .gallery img {
   flex: 0 0 auto;      /* prevent shrinking, keep width */
-  width: 120px;        /* thumbnail width */
-  height: 280px;       /* thumbnail height */
+  width: 180px;        /* thumbnail width */
+  height: 120px;       /* thumbnail height */
   object-fit: cover;   /* crop to fit container */
   border-radius: 8px;
   cursor: pointer;
