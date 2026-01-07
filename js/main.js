@@ -148,7 +148,84 @@ document.addEventListener("keydown", e => {
   }
 });
 
+const thumbs = Array.from(document.querySelectorAll(".thumb"));
+let currentIndex = 0;
 
+// Open by index
+function openLightbox(index) {
+  const img = thumbs[index];
+  if (!img) return;
+
+  currentIndex = index;
+
+  lightboxImg.classList.add("transitioning");
+
+  setTimeout(() => {
+    lightboxImg.src = img.src;
+    leftText.innerHTML = img.dataset.left || "";
+    rightText.innerHTML = img.dataset.right || "";
+
+    // Preload neighbors
+    preloadImage(thumbs[(index + 1) % thumbs.length]?.src);
+    preloadImage(thumbs[(index - 1 + thumbs.length) % thumbs.length]?.src);
+
+    lightboxImg.classList.remove("transitioning");
+  }, 150);
+
+  lightbox.classList.remove("hidden");
+}
+
+
+// Update existing click handler
+thumbs.forEach((img, index) => {
+  img.addEventListener("click", () => openLightbox(index));
+});
+
+// Swipe detection
+let startX = 0;
+
+lightbox.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+
+lightbox.addEventListener("touchend", e => {
+  const endX = e.changedTouches[0].clientX;
+  const diff = startX - endX;
+
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) {
+      openLightbox((currentIndex + 1) % thumbs.length); // next
+    } else {
+      openLightbox((currentIndex - 1 + thumbs.length) % thumbs.length); // prev
+    }
+  }
+});
+
+document.addEventListener("keydown", e => {
+  if (lightbox.classList.contains("hidden")) return;
+
+  if (e.key === "ArrowRight") {
+    openLightbox((currentIndex + 1) % thumbs.length);
+  }
+
+  if (e.key === "ArrowLeft") {
+    openLightbox((currentIndex - 1 + thumbs.length) % thumbs.length);
+  }
+});
+
+const prevBtn = document.querySelector(".lightbox-arrow.left");
+const nextBtn = document.querySelector(".lightbox-arrow.right");
+
+prevBtn.addEventListener("click", () => {
+  openLightbox((currentIndex - 1 + thumbs.length) % thumbs.length);
+});
+
+nextBtn.addEventListener("click", () => {
+  openLightbox((currentIndex + 1) % thumbs.length);
+});
+
+
+// Footer
 let lastScrollY = window.scrollY;
 const footer = document.getElementById("site-footer");
 
@@ -165,3 +242,9 @@ window.addEventListener("scroll", () => {
 
   lastScrollY = window.scrollY;
 });
+
+ // image loading
+function preloadImage(src) {
+  const img = new Image();
+  img.src = src;
+}

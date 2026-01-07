@@ -311,12 +311,87 @@ html {
   border-radius: 8px;
 }
 
-.lightbox-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.85);
-  line-height: 1.5;
+.lightbox-image {
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
+.lightbox-image.transitioning {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+
+.lightbox-text a {
+  color: #d8b4fe;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.lightbox-text a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  opacity: 0.6;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.lightbox-text a:hover::after {
+  transform: scaleX(1);
+}
+
+.lightbox-text a:hover {
+  color: #f5d0fe;
+}
+
+@media (max-width: 700px) {
+  .lightbox-text {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}
+
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s, transform 0.2s;
+  z-index: 2;
+}
+
+.lightbox-arrow.left {
+  left: 1rem;
+}
+
+.lightbox-arrow.right {
+  right: 1rem;
+}
+
+.lightbox-arrow:hover {
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Hide arrows on very small screens (swipe only) */
+@media (max-width: 500px) {
+  .lightbox-arrow {
+    display: none;
+  }
+}
+
 
 .lightbox-close {
   position: absolute;
