@@ -165,6 +165,13 @@ function openLightbox(index) {
     leftText.innerHTML = img.dataset.left || "";
     rightText.innerHTML = img.dataset.right || "";
 
+lightbox.classList.remove("show-text");
+
+setTimeout(() => {
+  lightbox.classList.add("show-text");
+}, 200);
+
+
     // Preload neighbors
     preloadImage(thumbs[(index + 1) % thumbs.length]?.src);
     preloadImage(thumbs[(index - 1 + thumbs.length) % thumbs.length]?.src);
@@ -222,6 +229,33 @@ prevBtn.addEventListener("click", () => {
 
 nextBtn.addEventListener("click", () => {
   openLightbox((currentIndex + 1) % thumbs.length);
+});
+
+const dotsContainer = document.querySelector(".lightbox-dots");
+
+thumbs.forEach(() => {
+  const dot = document.createElement("div");
+  dot.className = "lightbox-dot";
+  dotsContainer.appendChild(dot);
+});
+
+function updateDots() {
+  document.querySelectorAll(".lightbox-dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === currentIndex);
+  });
+}
+
+let startY = 0;
+
+lightbox.addEventListener("touchstart", e => {
+  startY = e.touches[0].clientY;
+});
+
+lightbox.addEventListener("touchend", e => {
+  const endY = e.changedTouches[0].clientY;
+  if (endY - startY > 80) {
+    lightbox.classList.add("hidden");
+  }
 });
 
 
