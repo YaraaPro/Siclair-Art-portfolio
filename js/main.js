@@ -113,6 +113,9 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
   });
 });
 
+let currentThumbs = [];
+let currentIndex = 0;
+
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.querySelector(".lightbox-image");
 const leftText = document.querySelector(".lightbox-text.left");
@@ -138,16 +141,16 @@ document.addEventListener("keydown", e => {
   }
 });
 
-const thumbs = Array.from(document.querySelectorAll(".thumb"));
-let currentIndex = 0;
+
+
 
 // Open by index
 function openLightbox(index) {
-  const img = thumbs[index];
+  const img = currentThumbs[index];
   if (!img) return;
 
   currentIndex = index;
-  
+
 lightbox.classList.remove("loaded");
 
   lightboxImg.classList.add("transitioning");
@@ -171,8 +174,8 @@ setTimeout(() => {
 
 
     // Preload neighbors
-    preloadImage(thumbs[(index + 1) % thumbs.length]?.src);
-    preloadImage(thumbs[(index - 1 + thumbs.length) % thumbs.length]?.src);
+    preloadImage(currentThumbs[(index + 1) % currentThumbs.length]?.src);
+    preloadImage(currentThumbs[(index - 1 + currentThumbs.length) % currentThumbs.length]?.src);
 
     lightboxImg.classList.remove("transitioning");
   }, 150);
@@ -182,9 +185,17 @@ setTimeout(() => {
 
 
 // Update existing click handler
-thumbs.forEach((img, index) => {
-  img.addEventListener("click", () => openLightbox(index));
+document.querySelectorAll(".thumb").forEach(img => {
+  img.addEventListener("click", () => {
+    const gallery = img.closest(".gallery");
+    currentThumbs = Array.from(gallery.querySelectorAll(".thumb"));
+    currentIndex = currentThumbs.indexOf(img);
+
+    buildDots();           // 👈 category dots
+    openLightbox(currentIndex);
+  });
 });
+
 
 // Swipe detection
 let startX = 0;
@@ -199,9 +210,9 @@ lightbox.addEventListener("touchend", e => {
 
   if (Math.abs(diff) > 50) {
     if (diff > 0) {
-      openLightbox((currentIndex + 1) % thumbs.length); // next
+      openLightbox((currentIndex + 1) % currentThumbs.length); // next
     } else {
-      openLightbox((currentIndex - 1 + thumbs.length) % thumbs.length); // prev
+      openLightbox((currentIndex - 1 + currentThumbs.length) % currentThumbs.length); // prev
     }
   }
 });
@@ -210,11 +221,11 @@ document.addEventListener("keydown", e => {
   if (lightbox.classList.contains("hidden")) return;
 
   if (e.key === "ArrowRight") {
-    openLightbox((currentIndex + 1) % thumbs.length);
+    openLightbox((currentIndex + 1) % currentThumbs.length);
   }
 
   if (e.key === "ArrowLeft") {
-    openLightbox((currentIndex - 1 + thumbs.length) % thumbs.length);
+    openLightbox((currentIndex - 1 + currentThumbs.length) % currentThumbs.length);
   }
 });
 
@@ -222,20 +233,36 @@ const prevBtn = document.querySelector(".lightbox-arrow.left");
 const nextBtn = document.querySelector(".lightbox-arrow.right");
 
 prevBtn.addEventListener("click", () => {
-  openLightbox((currentIndex - 1 + thumbs.length) % thumbs.length);
+  openLightbox((currentIndex - 1 + currentThumbs.length) % currentThumbs.length);
 });
 
 nextBtn.addEventListener("click", () => {
-  openLightbox((currentIndex + 1) % thumbs.length);
+  openLightbox((currentIndex + 1) % currentThumbs.length);
 });
 
 const dotsContainer = document.querySelector(".lightbox-dots");
 
-thumbs.forEach(() => {
-  const dot = document.createElement("div");
-  dot.className = "lightbox-dot";
-  dotsContainer.appendChild(dot);
-});
+function buildDots() {
+  dotsContainer.innerHTML = "";
+
+  currentThumbs.forEach((_, i) => {
+    const dot = document.createElement("div");
+    dot.className = "lightbox-dot";
+    dot.setAttribute("aria-label", `Go to image ${i + 1}`);
+    dot.addEventListener("click", () => openLightbox(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  updateDots();
+}
+
+function updateDots() {
+  const dots = dotsContainer.querySelectorAll(".lightbox-dot");
+  dots.forEach((dot, i) => {
+    dot.classList.toggle("active", i === currentIndex);
+  });
+}
+
 
 function updateDots() {
   document.querySelectorAll(".lightbox-dot").forEach((dot, i) => {
