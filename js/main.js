@@ -119,16 +119,6 @@ const leftText = document.querySelector(".lightbox-text.left");
 const rightText = document.querySelector(".lightbox-text.right");
 const closeBtn = document.querySelector(".lightbox-close");
 
-// Open lightbox
-document.querySelectorAll(".thumb").forEach(img => {
-  img.addEventListener("click", () => {
-    lightboxImg.src = img.src;
-    leftText.innerHTML = img.dataset.left || "";
-    rightText.innerHTML = img.dataset.right || "";
-    lightbox.classList.remove("hidden");
-  });
-});
-
 // Close button
 closeBtn.addEventListener("click", () => {
   lightbox.classList.add("hidden");
@@ -157,13 +147,21 @@ function openLightbox(index) {
   if (!img) return;
 
   currentIndex = index;
+  
+lightbox.classList.remove("loaded");
 
   lightboxImg.classList.add("transitioning");
+
+  lightboxImg.onload = () => {
+  lightbox.classList.add("loaded");
+};
 
   setTimeout(() => {
     lightboxImg.src = img.src;
     leftText.innerHTML = img.dataset.left || "";
     rightText.innerHTML = img.dataset.right || "";
+    updateDots();
+
 
 lightbox.classList.remove("show-text");
 
@@ -244,21 +242,6 @@ function updateDots() {
     dot.classList.toggle("active", i === currentIndex);
   });
 }
-
-let startY = 0;
-
-lightbox.addEventListener("touchstart", e => {
-  startY = e.touches[0].clientY;
-});
-
-lightbox.addEventListener("touchend", e => {
-  const endY = e.changedTouches[0].clientY;
-  if (endY - startY > 80) {
-    lightbox.classList.add("hidden");
-  }
-});
-
-
 // Footer
 let lastScrollY = window.scrollY;
 const footer = document.getElementById("site-footer");
