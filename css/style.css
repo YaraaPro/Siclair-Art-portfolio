@@ -145,6 +145,19 @@ body::before {
 }
 
 
+.event-group {
+  margin-bottom: 2.5rem;
+}
+
+.event-group h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: #e9d5ff;
+  margin-bottom: 0.6rem;
+  text-shadow: 0 0 6px rgba(139,92,246,0.4);
+}
+
+
 /* Gallery grid */
 .gallery {
   display: grid;

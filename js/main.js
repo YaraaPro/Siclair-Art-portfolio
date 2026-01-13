@@ -282,6 +282,9 @@ lightboxImg.addEventListener("click", e => {
 isZoomed = false;
 lightboxImg.classList.remove("zoomed");
 
+const eventTitle = img.dataset.event;
+eventLabel.textContent = eventTitle || "";
+
 
 // Footer
 let lastScrollY = window.scrollY;
