@@ -269,6 +269,20 @@ function updateDots() {
     dot.classList.toggle("active", i === currentIndex);
   });
 }
+
+let isZoomed = false;
+
+lightboxImg.addEventListener("click", e => {
+  e.stopPropagation(); // don’t close lightbox
+
+  isZoomed = !isZoomed;
+  lightboxImg.classList.toggle("zoomed", isZoomed);
+});
+
+isZoomed = false;
+lightboxImg.classList.remove("zoomed");
+
+
 // Footer
 let lastScrollY = window.scrollY;
 const footer = document.getElementById("site-footer");

@@ -315,6 +315,18 @@ html {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+.lightbox-image {
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+  touch-action: pinch-zoom;
+}
+
+.lightbox-image.zoomed {
+  transform: scale(1.8);
+  cursor: zoom-out;
+}
+
+
 .lightbox-image.transitioning {
   opacity: 0;
   transform: scale(0.98);
