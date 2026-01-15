@@ -104,26 +104,142 @@ let currentIndex = 0;
 // ==============================
 // 🔍 ZOOM + PAN STATE
 // ==============================
-let isZoomed = false;
 let scale = 1;
 let posX = 0;
 let posY = 0;
 let startX = 0;
 let startY = 0;
 let isDragging = false;
+let isZoomed = false;
 let lastTap = 0;
+let lastX = 0;
+let lastY = 0;
 
-function applyTransform() {
-  lightboxImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+
+function updateTransform() {
+  lightboxImg.style.transform =
+    `translate3d(${posX}px, ${posY}px, 0) scale(${scale})`;
 }
 
+
 function resetZoom() {
-  isZoomed = false;
   scale = 1;
   posX = 0;
   posY = 0;
-  applyTransform();
+  isZoomed = false;
+  lightboxImg.classList.remove("zoomed");
+  updateTransform();
 }
+
+
+
+/* CLICK / DOUBLE TAP TO ZOOM */
+lightboxImg.addEventListener("click", e => {
+  e.stopPropagation(); // 🔒 prevents lightbox close
+
+  isZoomed = !isZoomed;
+  scale = isZoomed ? 2 : 1;
+  posX = 0;
+  posY = 0;
+
+  lightboxImg.classList.toggle("zoomed", isZoomed);
+  updateTransform();
+});
+
+
+/* DOUBLE TAP (mobile) */
+lightboxImg.addEventListener("touchend", e => {
+  const now = Date.now();
+  if (now - lastTap < 300) {
+    isZoomed = !isZoomed;
+    scale = isZoomed ? 2 : 1;
+    posX = 0;
+    posY = 0;
+    lightboxImg.classList.toggle("zoomed", isZoomed);
+    updateTransform();
+  }
+  lastTap = now;
+});
+
+/* DRAG START */
+function startDrag(x, y) {
+  isDragging = true;
+  lastX = x;
+  lastY = y;
+  lightboxImg.classList.add("dragging");
+}
+
+lightboxImg.addEventListener("mousedown", e => {
+  if (!isZoomed) return;
+  e.preventDefault();
+  startDrag(e.clientX, e.clientY);
+});
+
+lightboxImg.addEventListener("touchstart", e => {
+  if (!isZoomed) return;
+  e.preventDefault();
+  const t = e.touches[0];
+  startDrag(t.clientX, t.clientY);
+}, { passive: false });
+
+/* DRAG MOVE */
+function dragMove(x, y) {
+  if (!isDragging) return;
+
+  const dx = x - lastX;
+  const dy = y - lastY;
+
+  posX += dx;
+  posY += dy;
+
+  lastX = x;
+  lastY = y;
+
+  applyBounds();
+  updateTransform();
+}
+
+document.addEventListener("mousemove", e => {
+  dragMove(e.clientX, e.clientY);
+});
+
+document.addEventListener("touchmove", e => {
+  if (!isDragging) return;
+  e.preventDefault();
+  const t = e.touches[0];
+  dragMove(t.clientX, t.clientY);
+}, { passive: false });
+
+
+/* DRAG END */
+function endDrag() {
+  isDragging = false;
+  lightboxImg.classList.remove("dragging");
+}
+
+document.addEventListener("mouseup", endDrag);
+document.addEventListener("touchend", endDrag);
+
+/* SOFT BOUNDS */
+function applyBounds() {
+  const maxOffsetX = (lightboxImg.clientWidth * (scale - 1)) / 2;
+  const maxOffsetY = (lightboxImg.clientHeight * (scale - 1)) / 2;
+
+  const damp = 0.85;
+
+  if (posX > maxOffsetX) posX = maxOffsetX * damp;
+  if (posX < -maxOffsetX) posX = -maxOffsetX * damp;
+
+  if (posY > maxOffsetY) posY = maxOffsetY * damp;
+  if (posY < -maxOffsetY) posY = -maxOffsetY * damp;
+}
+
+
+/* RESET ZOOM WHEN IMAGE CHANGES */
+function onImageChange() {
+  resetZoom();
+}
+
 
 
 // ==============================
@@ -153,6 +269,8 @@ function openLightbox(index) {
     preloadImage(currentThumbs[(index - 1 + currentThumbs.length) % currentThumbs.length]?.src);
   }, 150);
 }
+
+
 
 
 // ==============================
@@ -190,68 +308,19 @@ document.addEventListener("keydown", e => {
 // ==============================
 // 📱 SWIPE NAVIGATION
 // ==============================
-let swipeStartX = 0;
-
-lightbox.addEventListener("touchstart", e => {
-  swipeStartX = e.touches[0].clientX;
-});
-
 lightbox.addEventListener("touchend", e => {
-  if (isZoomed) return;
+  if (isZoomed) return; // 🚫 don’t swipe while zoomed
 
-  const diff = swipeStartX - e.changedTouches[0].clientX;
+  const endX = e.changedTouches[0].clientX;
+  const diff = startX - endX;
+
   if (Math.abs(diff) > 50) {
-    diff > 0 ? nextBtn.click() : prevBtn.click();
+    diff > 0
+      ? openLightbox((currentIndex + 1) % currentThumbs.length)
+      : openLightbox((currentIndex - 1 + currentThumbs.length) % currentThumbs.length);
   }
 });
 
-
-// ==============================
-// 🔎 ZOOM + DRAG
-// ==============================
-lightboxImg.addEventListener("click", e => {
-  e.stopPropagation();
-  if (!isZoomed) {
-    isZoomed = true;
-    scale = 2;
-  } else {
-    resetZoom();
-  }
-  applyTransform();
-});
-
-lightboxImg.addEventListener("touchend", e => {
-  const now = Date.now();
-  if (now - lastTap < 300) {
-    e.preventDefault();
-    isZoomed ? resetZoom() : (isZoomed = true, scale = 2);
-    applyTransform();
-  }
-  lastTap = now;
-});
-
-lightboxImg.addEventListener("mousedown", e => {
-  if (!isZoomed) return;
-  isDragging = true;
-  startX = e.clientX - posX;
-  startY = e.clientY - posY;
-});
-
-window.addEventListener("mousemove", e => {
-  if (!isDragging) return;
-  posX = e.clientX - startX;
-  posY = e.clientY - startY;
-  applyTransform();
-});
-
-window.addEventListener("mouseup", () => isDragging = false);
-
-lightboxImg.addEventListener("touchmove", e => {
-  if (!isZoomed || e.touches.length !== 1) return;
-  posX = e.touches[0].clientX - startX;
-  posY = e.touches[0].clientY - startY;
-  applyTransform();
-});
 
 
 // ==============================

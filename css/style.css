@@ -330,15 +330,17 @@ html {
 
 .lightbox-image {
   cursor: zoom-in;
-  transition: transform 0.3s ease;
-  touch-action: pinch-zoom;
-  user-select: none;
+  transition: transform 0.25s ease;
+  touch-action: none;
 }
 
 .lightbox-image.zoomed {
-  transform: scale(1.8);
-  cursor: zoom-out;
   cursor: grab;
+}
+
+.lightbox-image {
+  cursor: grab;
+  touch-action: none;
 }
 
 .lightbox-image.dragging {
