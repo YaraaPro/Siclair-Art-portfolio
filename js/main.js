@@ -134,17 +134,26 @@ function resetZoom() {
 
 
 /* CLICK / DOUBLE TAP TO ZOOM */
-lightboxImg.addEventListener("click", e => {
-  e.stopPropagation(); // 🔒 prevents lightbox close
+let lastTapTime = 0;
+const DOUBLE_TAP_DELAY = 300;
 
-  isZoomed = !isZoomed;
-  scale = isZoomed ? 2 : 1;
-  posX = 0;
-  posY = 0;
+lightboxImg.addEventListener("touchend", e => {
+  e.preventDefault();
 
-  lightboxImg.classList.toggle("zoomed", isZoomed);
-  updateTransform();
-});
+  const now = Date.now();
+  const tapGap = now - lastTapTime;
+
+  if (tapGap < DOUBLE_TAP_DELAY) {
+    // 🔍 DOUBLE TAP → TOGGLE ZOOM
+    isZoomed = !isZoomed;
+    scale = isZoomed ? 2 : 1;
+    posX = 0;
+    posY = 0;
+    updateTransform();
+  }
+
+  lastTapTime = now;
+}, { passive: false });
 
 
 /* DOUBLE TAP (mobile) */
