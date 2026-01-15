@@ -156,20 +156,6 @@ lightboxImg.addEventListener("touchend", e => {
 }, { passive: false });
 
 
-/* DOUBLE TAP (mobile) */
-lightboxImg.addEventListener("touchend", e => {
-  const now = Date.now();
-  if (now - lastTap < 300) {
-    isZoomed = !isZoomed;
-    scale = isZoomed ? 2 : 1;
-    posX = 0;
-    posY = 0;
-    lightboxImg.classList.toggle("zoomed", isZoomed);
-    updateTransform();
-  }
-  lastTap = now;
-});
-
 /* DRAG START */
 function startDrag(x, y) {
   isDragging = true;
