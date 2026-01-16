@@ -114,6 +114,10 @@ let isZoomed = false;
 let lastTap = 0;
 let lastX = 0;
 let lastY = 0;
+let touchStartX = 0;
+let touchStartY = 0;
+let hasMoved = false;
+
 
 
 function updateTransform() {
@@ -156,6 +160,22 @@ lightboxImg.addEventListener("touchend", e => {
 }, { passive: false });
 
 
+/* DOUBLE TAP (mobile) */
+lightboxImg.addEventListener("touchend", e => {
+  const now = Date.now();
+  if (now - lastTap < 300) {
+    isZoomed = !isZoomed;
+    scale = isZoomed ? 2 : 1;
+    posX = 0;
+    posY = 0;
+    lightboxImg.classList.toggle("zoomed", isZoomed);
+    updateTransform();
+  }
+  lastTap = now;
+});
+
+
+
 /* DRAG START */
 function startDrag(x, y) {
   isDragging = true;
@@ -176,6 +196,19 @@ lightboxImg.addEventListener("touchstart", e => {
   const t = e.touches[0];
   startDrag(t.clientX, t.clientY);
 }, { passive: false });
+
+lightboxImg.addEventListener("touchstart", e => {
+  if (!isZoomed) return;
+
+  const t = e.touches[0];
+  touchStartX = t.clientX;
+  touchStartY = t.clientY;
+  hasMoved = false;
+
+  lastX = t.clientX;
+  lastY = t.clientY;
+}, { passive: false });
+
 
 /* DRAG MOVE */
 function dragMove(x, y) {
@@ -205,6 +238,29 @@ document.addEventListener("touchmove", e => {
   dragMove(t.clientX, t.clientY);
 }, { passive: false });
 
+lightboxImg.addEventListener("touchmove", e => {
+  if (!isZoomed) return;
+
+  const t = e.touches[0];
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+
+  // 👇 movement threshold (prevents clunk)
+  if (!hasMoved && Math.hypot(dx, dy) < 8) return;
+
+  hasMoved = true;
+  e.preventDefault(); // 🚫 stop scrolling
+
+  posX += t.clientX - lastX;
+  posY += t.clientY - lastY;
+
+  lastX = t.clientX;
+  lastY = t.clientY;
+
+  applyBounds();
+  updateTransform();
+}, { passive: false });
+
 
 /* DRAG END */
 function endDrag() {
@@ -214,6 +270,11 @@ function endDrag() {
 
 document.addEventListener("mouseup", endDrag);
 document.addEventListener("touchend", endDrag);
+
+lightboxImg.addEventListener("touchend", () => {
+  hasMoved = false;
+});
+
 
 /* SOFT BOUNDS */
 function applyBounds() {

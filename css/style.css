@@ -339,6 +339,13 @@ html {
 }
 
 .lightbox-image {
+  touch-action: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+
+.lightbox-image {
   cursor: grab;
   touch-action: none;
 }
