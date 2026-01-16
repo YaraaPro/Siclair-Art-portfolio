@@ -322,46 +322,24 @@ html {
   max-height: 85vh;
   max-width: 60vw;
   border-radius: 8px;
-}
 
-.lightbox-image {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.lightbox-image {
-  cursor: zoom-in;
-  transition: transform 0.25s ease;
-  touch-action: none;
-}
-
-.lightbox-image.zoomed {
-  cursor: grab;
-}
-
-.lightbox-image {
-  touch-action: none;
   user-select: none;
   -webkit-user-drag: none;
+
   cursor: zoom-in;
-}
+  transition: opacity 0.3s ease, transform 0.25s ease;
 
-.lightbox-image.zoomed {
-  cursor: grab;
-}
-
-.lightbox-image {
   touch-action: manipulation;
 }
 
 .lightbox-image.zoomed {
-  touch-action: none;
+  cursor: grab;
+  touch-action: none; /* JS handles gestures when zoomed */
 }
-
 
 .lightbox-image.dragging {
   cursor: grabbing;
 }
-
 
 .lightbox-image.transitioning {
   opacity: 0;

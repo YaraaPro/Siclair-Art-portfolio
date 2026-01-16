@@ -115,8 +115,6 @@ let isZoomed = false;
 let lastTap = 0;
 let lastX = 0;
 let lastY = 0;
-let touchStartX = 0;
-let touchStartY = 0;
 let hasMoved = false;
 
 
@@ -202,6 +200,8 @@ const MOVE_THRESHOLD = 10;
 let lastTapTime = 0;
 let touchStartTime = 0;
 let touchMoved = false;
+let touchStartX = 0;
+let touchStartY = 0;
 
 // touch start
 lightboxImg.addEventListener("touchstart", e => {
@@ -221,7 +221,6 @@ lightboxImg.addEventListener("touchstart", e => {
   }
 }, { passive: false });
 
-
 // touch move
 lightboxImg.addEventListener("touchmove", e => {
   if (!isDragging) return;
@@ -233,7 +232,7 @@ lightboxImg.addEventListener("touchmove", e => {
   if (!touchMoved && Math.hypot(dx, dy) < MOVE_THRESHOLD) return;
 
   touchMoved = true;
-  e.preventDefault(); // 🚫 stop page scroll
+  e.preventDefault(); // stop page scroll
 
   posX += dx;
   posY += dy;
@@ -244,7 +243,6 @@ lightboxImg.addEventListener("touchmove", e => {
   applyBounds();
   updateTransform();
 }, { passive: false });
-
 
 // touch end
 lightboxImg.addEventListener("touchend", e => {
@@ -264,7 +262,6 @@ lightboxImg.addEventListener("touchend", e => {
   isDragging = false;
   touchMoved = false;
 });
-
 
 /* DRAG START */
 lightboxImg.addEventListener("mousedown", e => {
