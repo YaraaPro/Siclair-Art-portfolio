@@ -87,7 +87,7 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
 
 
 // ==============================
-// 🌙 LIGHTBOX CORE
+// 🌙 LIGHTBOX CORE (READY-TO-PASTE)
 // ==============================
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.querySelector(".lightbox-image");
@@ -101,148 +101,212 @@ const nextBtn = document.querySelector(".lightbox-arrow.right");
 let currentThumbs = [];
 let currentIndex = 0;
 
+// Zoom / Pan State
+let scale = 1, posX = 0, posY = 0;
+let isZoomed = false, isDragging = false;
+let lastX = 0, lastY = 0;
+let touchStartX = 0, touchStartY = 0, touchMoved = false;
+const ZOOM_SCALE = 2;
+const DOUBLE_TAP_DELAY = 400; // ✅ more forgiving
+const MOVE_THRESHOLD = 10;
+let lastTapTime = 0;
 
-// ==============================
-// 🔍 ZOOM + PAN STATE
-// ==============================
-let scale = 1;
-let posX = 0;
-let posY = 0;
-let startX = 0;
-let startY = 0;
-let isDragging = false;
-let isZoomed = false;
-let lastTap = 0;
-let lastX = 0;
-let lastY = 0;
-let hasMoved = false;
-
-
-
+// ------------------------------
+// Update image transform
 function updateTransform() {
-  lightboxImg.style.transform =
-    `translate3d(${posX}px, ${posY}px, 0) scale(${scale})`;
+  lightboxImg.style.transform = `translate3d(${posX}px, ${posY}px,0) scale(${scale})`;
 }
 
-
+// Reset zoom
 function resetZoom() {
-  scale = 1;
-  posX = 0;
-  posY = 0;
+  scale = 1; posX = 0; posY = 0;
   isZoomed = false;
-  lightboxImg.classList.remove("zoomed");
+  isDragging = false;
+  lightboxImg.classList.remove("zoomed", "dragging");
   updateTransform();
 }
 
-
-// ==============================
-// 🔍 ZOOM TOGGLE (SINGLE SOURCE OF TRUTH)
-// ==============================
-const ZOOM_SCALE = 2;
-
+// Toggle zoom
 function toggleZoom() {
   isZoomed = !isZoomed;
   scale = isZoomed ? ZOOM_SCALE : 1;
-  posX = 0;
-  posY = 0;
+  posX = 0; posY = 0;
   lightboxImg.classList.toggle("zoomed", isZoomed);
   updateTransform();
 }
 
-/* Desktop double-click */
-lightboxImg.addEventListener("dblclick", e => {
-  e.preventDefault();
-  toggleZoom();
-});
+// Apply bounds
+function applyBounds() {
+  const maxX = (lightboxImg.clientWidth * (scale - 1)) / 2;
+  const maxY = (lightboxImg.clientHeight * (scale - 1)) / 2;
+  const damp = 0.85;
+  if (posX > maxX) posX = maxX * damp;
+  if (posX < -maxX) posX = -maxX * damp;
+  if (posY > maxY) posY = maxY * damp;
+  if (posY < -maxY) posY = -maxY * damp;
+}
 
-
-// ==============================
-// 📱 MOBILE SWIPE NAVIGATION (LIGHTBOX)
-// ==============================
-let swipeStartX = 0;
-let swipeStartY = 0;
-let swipeStartTime = 0;
-
-lightbox.addEventListener("touchstart", e => {
-  if (isZoomed) return; // 🚫 don't swipe when zoomed
-  if (e.touches.length !== 1) return;
-
-  const t = e.touches[0];
-  swipeStartX = t.clientX;
-  swipeStartY = t.clientY;
-  swipeStartTime = Date.now();
-}, { passive: true });
-
-lightbox.addEventListener("touchend", e => {
-  if (isZoomed) return;
-  if (!swipeStartTime) return;
-
-  const t = e.changedTouches[0];
-  const dx = t.clientX - swipeStartX;
-  const dy = t.clientY - swipeStartY;
-  const dt = Date.now() - swipeStartTime;
-
-  // horizontal swipe only
-  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) && dt < 500) {
-    dx < 0 ? nextBtn.click() : prevBtn.click();
-  }
-
-  swipeStartTime = 0;
-});
-
-
-// ==============================
-// 📱 MOBILE TOUCH GESTURES (CLEAN)
-// ==============================
-const DOUBLE_TAP_DELAY = 300;
-const MOVE_THRESHOLD = 10;
-
-let lastTapTime = 0;
-let touchStartTime = 0;
-let touchMoved = false;
-let touchStartX = 0;
-let touchStartY = 0;
-
-// touch start
-lightboxImg.addEventListener("touchstart", e => {
-  if (e.touches.length !== 1) return;
-
-  const t = e.touches[0];
-  touchStartX = t.clientX;
-  touchStartY = t.clientY;
-  lastX = t.clientX;
-  lastY = t.clientY;
-
-  touchMoved = false;
-  touchStartTime = Date.now();
-
-  if (isZoomed) {
-    isDragging = true;
-  }
-}, { passive: false });
-
-// touch move
-lightboxImg.addEventListener("touchmove", e => {
+// ------------------------------
+// Drag handlers
+function startDrag(x, y) {
+  isDragging = true; lastX = x; lastY = y;
+  lightboxImg.classList.add("dragging");
+}
+function dragMove(x, y) {
   if (!isDragging) return;
-
-  const t = e.touches[0];
-  const dx = t.clientX - lastX;
-  const dy = t.clientY - lastY;
-
-  if (!touchMoved && Math.hypot(dx, dy) < MOVE_THRESHOLD) return;
-
-  touchMoved = true;
-  e.preventDefault(); // stop page scroll
-
-  posX += dx;
-  posY += dy;
-
-  lastX = t.clientX;
-  lastY = t.clientY;
-
+  const dx = x - lastX, dy = y - lastY;
+  posX += dx; posY += dy;
+  lastX = x; lastY = y;
   applyBounds();
   updateTransform();
-}, { passive: false });
+}
+function endDrag() {
+  isDragging = false;
+  lightboxImg.classList.remove("dragging");
+}
+
+// ------------------------------
+// Desktop double-click
+lightboxImg.addEventListener("dblclick", e => { e.preventDefault(); toggleZoom(); });
+
+// ------------------------------
+// Mobile touch gestures (double-tap + drag + swipe)
+lightboxImg.addEventListener("touchstart", e => {
+  if (e.touches.length !== 1) return;
+  const t = e.touches[0];
+  touchStartX = t.clientX; touchStartY = t.clientY;
+  lastX = t.clientX; lastY = t.clientY;
+  touchMoved = false;
+
+  if (isZoomed) isDragging = true;
+});
+
+lightboxImg.addEventListener("touchmove", e => {
+  if (!isDragging) return;
+  const t = e.touches[0];
+  const dx = t.clientX - lastX, dy = t.clientY - lastY;
+  if (!touchMoved && Math.hypot(dx, dy) < MOVE_THRESHOLD) return;
+  touchMoved = true;
+  e.preventDefault();
+  posX += dx; posY += dy;
+  lastX = t.clientX; lastY = t.clientY;
+  applyBounds(); updateTransform();
+});
+
+lightboxImg.addEventListener("touchend", e => {
+  const now = Date.now();
+  if (!touchMoved) {
+    if (now - lastTapTime < DOUBLE_TAP_DELAY) {
+      toggleZoom();
+      lastTapTime = 0;
+      return;
+    }
+    lastTapTime = now;
+  }
+  isDragging = false;
+  touchMoved = false;
+});
+
+// ------------------------------
+// Open lightbox
+function openLightbox(index) {
+  const img = currentThumbs[index];
+  if (!img) return;
+  currentIndex = index; resetZoom();
+
+  lightbox.classList.remove("loaded", "hidden");
+  lightboxImg.classList.add("transitioning");
+
+  setTimeout(() => {
+    lightboxImg.src = img.src;
+    lightboxImg.onload = () => lightbox.classList.add("loaded");
+
+    leftText.innerHTML = img.dataset.left || "";
+    rightText.innerHTML = img.dataset.right || "";
+
+    lightbox.classList.remove("show-text");
+    requestAnimationFrame(() => lightbox.classList.add("show-text"));
+
+    updateDots();
+    lightboxImg.classList.remove("transitioning");
+
+    preloadImage(currentThumbs[(index + 1) % currentThumbs.length]?.src);
+    preloadImage(currentThumbs[(index - 1 + currentThumbs.length) % currentThumbs.length]?.src);
+  }, 150);
+}
+
+// ------------------------------
+// Thumbnail click (per category)
+document.querySelectorAll(".thumb").forEach(img => {
+  img.addEventListener("click", () => {
+    const gallery = img.closest(".gallery");
+    currentThumbs = Array.from(gallery.querySelectorAll(".thumb"));
+    currentIndex = currentThumbs.indexOf(img);
+    buildDots();
+    openLightbox(currentIndex);
+  });
+});
+
+// ------------------------------
+// Navigation arrows
+prevBtn.addEventListener("click", () =>
+  openLightbox((currentIndex - 1 + currentThumbs.length) % currentThumbs.length));
+nextBtn.addEventListener("click", () =>
+  openLightbox((currentIndex + 1) % currentThumbs.length));
+
+document.addEventListener("keydown", e => {
+  if (lightbox.classList.contains("hidden")) return;
+  if (e.key === "ArrowRight") nextBtn.click();
+  if (e.key === "ArrowLeft") prevBtn.click();
+  if (e.key === "Escape") lightbox.classList.add("hidden");
+});
+
+// ------------------------------
+// Swipe (only when not zoomed)
+lightbox.addEventListener("touchstart", e => {
+  if (isZoomed) return;
+  startX = e.touches[0].clientX;
+});
+lightbox.addEventListener("touchend", e => {
+  if (isZoomed) return;
+  const endX = e.changedTouches[0].clientX;
+  const diff = startX - endX;
+  if (Math.abs(diff) > 50) {
+    diff > 0
+      ? openLightbox((currentIndex + 1) % currentThumbs.length)
+      : openLightbox((currentIndex - 1 + currentThumbs.length) % currentThumbs.length);
+  }
+});
+
+// ------------------------------
+// Progress dots
+function buildDots() {
+  dotsContainer.innerHTML = "";
+  currentThumbs.forEach((_, i) => {
+    const dot = document.createElement("div");
+    dot.className = "lightbox-dot";
+    dot.addEventListener("click", () => openLightbox(i));
+    dotsContainer.appendChild(dot);
+  });
+  updateDots();
+}
+function updateDots() {
+  dotsContainer.querySelectorAll(".lightbox-dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === currentIndex);
+  });
+}
+
+// ------------------------------
+// Close
+closeBtn.addEventListener("click", () => lightbox.classList.add("hidden"));
+lightbox.addEventListener("click", e => { if (e.target === lightbox) lightbox.classList.add("hidden"); });
+
+// ------------------------------
+// Utilities
+function preloadImage(src) {
+  if (!src) return;
+  const img = new Image(); img.src = src;
+}
 
 // touch end
 lightboxImg.addEventListener("touchend", e => {
