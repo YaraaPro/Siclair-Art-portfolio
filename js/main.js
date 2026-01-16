@@ -157,6 +157,42 @@ lightboxImg.addEventListener("dblclick", e => {
   toggleZoom();
 });
 
+
+// ==============================
+// 📱 MOBILE SWIPE NAVIGATION (LIGHTBOX)
+// ==============================
+let swipeStartX = 0;
+let swipeStartY = 0;
+let swipeStartTime = 0;
+
+lightbox.addEventListener("touchstart", e => {
+  if (isZoomed) return; // 🚫 don't swipe when zoomed
+  if (e.touches.length !== 1) return;
+
+  const t = e.touches[0];
+  swipeStartX = t.clientX;
+  swipeStartY = t.clientY;
+  swipeStartTime = Date.now();
+}, { passive: true });
+
+lightbox.addEventListener("touchend", e => {
+  if (isZoomed) return;
+  if (!swipeStartTime) return;
+
+  const t = e.changedTouches[0];
+  const dx = t.clientX - swipeStartX;
+  const dy = t.clientY - swipeStartY;
+  const dt = Date.now() - swipeStartTime;
+
+  // horizontal swipe only
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) && dt < 500) {
+    dx < 0 ? nextBtn.click() : prevBtn.click();
+  }
+
+  swipeStartTime = 0;
+});
+
+
 // ==============================
 // 📱 MOBILE TOUCH GESTURES (CLEAN)
 // ==============================
