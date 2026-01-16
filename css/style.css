@@ -396,6 +396,78 @@ html {
   }
 }
 
+/* Make sure image always sits above text when zoomed */
+.lightbox-image {
+  position: relative;
+  z-index: 2; /* base z-index for unzoomed image */
+  transition: transform 0.25s ease, z-index 0s 0s;
+}
+
+/* When zoomed, raise image above all text */
+.lightbox-image.zoomed {
+  z-index: 10;
+}
+
+/* Base text style */
+.lightbox-text {
+  position: relative;
+  z-index: 1; /* behind normal image */
+  opacity: 1;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Links style */
+.lightbox-text a {
+  color: #d8b4fe;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+.lightbox-text a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  opacity: 0.6;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.lightbox-text a:hover::after {
+  transform: scaleX(1);
+}
+.lightbox-text a:hover {
+  color: #f5d0fe;
+}
+
+/* Mobile text size */
+@media (max-width: 700px) {
+  .lightbox-text {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}
+
+/* ===================== */
+/* Image above everything */
+.lightbox-image {
+  position: relative;
+  z-index: 5; /* always on top */
+}
+
+/* ===================== */
+/* When lightbox is zoomed, fade & push all text behind */
+#lightbox.zoomed .lightbox-text {
+  z-index: 1;         /* behind image */
+  opacity: 0.3;       /* optional fade */
+  pointer-events: none; /* prevent accidental taps */
+}
+
+
 .lightbox-arrow {
   position: absolute;
   top: 50%;
@@ -448,7 +520,6 @@ html {
 
 @media (max-width: 600px) {
   .lightbox::after {
-    content: "← swipe →";
     position: absolute;
     bottom: 1.2rem;
     left: 50%;
