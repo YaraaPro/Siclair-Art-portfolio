@@ -136,27 +136,11 @@ function resetZoom() {
   updateTransform();
 }
 
+
 // ==============================
-// 🔍 ZOOM (DESKTOP + MOBILE)
+// 🔍 ZOOM TOGGLE (SINGLE SOURCE OF TRUTH)
 // ==============================
 const ZOOM_SCALE = 2;
-const DOUBLE_TAP_DELAY = 300;
-let lastTapTime = 0;
-
-/* Desktop: double-click */
-lightboxImg.addEventListener("dblclick", e => {
-  e.preventDefault();
-  toggleZoom();
-});
-
-/* Mobile: double-tap */
-lightboxImg.addEventListener("touchend", e => {
-  const now = Date.now();
-  if (now - lastTapTime < DOUBLE_TAP_DELAY) {
-    toggleZoom();
-  }
-  lastTapTime = now;
-}, { passive: false });
 
 function toggleZoom() {
   isZoomed = !isZoomed;
@@ -167,15 +151,86 @@ function toggleZoom() {
   updateTransform();
 }
 
+/* Desktop double-click */
+lightboxImg.addEventListener("dblclick", e => {
+  e.preventDefault();
+  toggleZoom();
+});
+
+// ==============================
+// 📱 MOBILE TOUCH GESTURES (CLEAN)
+// ==============================
+const DOUBLE_TAP_DELAY = 300;
+const MOVE_THRESHOLD = 10;
+
+let lastTapTime = 0;
+let touchStartTime = 0;
+let touchMoved = false;
+
+// touch start
+lightboxImg.addEventListener("touchstart", e => {
+  if (e.touches.length !== 1) return;
+
+  const t = e.touches[0];
+  touchStartX = t.clientX;
+  touchStartY = t.clientY;
+  lastX = t.clientX;
+  lastY = t.clientY;
+
+  touchMoved = false;
+  touchStartTime = Date.now();
+
+  if (isZoomed) {
+    isDragging = true;
+  }
+}, { passive: false });
+
+
+// touch move
+lightboxImg.addEventListener("touchmove", e => {
+  if (!isDragging) return;
+
+  const t = e.touches[0];
+  const dx = t.clientX - lastX;
+  const dy = t.clientY - lastY;
+
+  if (!touchMoved && Math.hypot(dx, dy) < MOVE_THRESHOLD) return;
+
+  touchMoved = true;
+  e.preventDefault(); // 🚫 stop page scroll
+
+  posX += dx;
+  posY += dy;
+
+  lastX = t.clientX;
+  lastY = t.clientY;
+
+  applyBounds();
+  updateTransform();
+}, { passive: false });
+
+
+// touch end
+lightboxImg.addEventListener("touchend", e => {
+  const now = Date.now();
+  const tapDuration = now - touchStartTime;
+
+  // DOUBLE TAP (only if finger didn't move)
+  if (!touchMoved && tapDuration < 250) {
+    if (now - lastTapTime < DOUBLE_TAP_DELAY) {
+      toggleZoom();
+      lastTapTime = 0;
+      return;
+    }
+    lastTapTime = now;
+  }
+
+  isDragging = false;
+  touchMoved = false;
+});
+
 
 /* DRAG START */
-function startDrag(x, y) {
-  isDragging = true;
-  lastX = x;
-  lastY = y;
-  lightboxImg.classList.add("dragging");
-}
-
 lightboxImg.addEventListener("mousedown", e => {
   if (!isZoomed) return;
   isDragging = true;
@@ -183,19 +238,6 @@ lightboxImg.addEventListener("mousedown", e => {
   lastY = e.clientY;
 });
 
-
-
-lightboxImg.addEventListener("touchstart", e => {
-  if (!isZoomed) return;
-
-  const t = e.touches[0];
-  touchStartX = t.clientX;
-  touchStartY = t.clientY;
-  hasMoved = false;
-
-  lastX = t.clientX;
-  lastY = t.clientY;
-}, { passive: false });
 
 
 /* DRAG MOVE */
@@ -220,13 +262,6 @@ document.addEventListener("mousemove", e => {
   dragMove(e.clientX, e.clientY);
 });
 
-
-document.addEventListener("touchmove", e => {
-  if (!isDragging) return;
-  e.preventDefault();
-  const t = e.touches[0];
-  dragMove(t.clientX, t.clientY);
-}, { passive: false });
 
 lightboxImg.addEventListener("touchmove", e => {
   if (!isZoomed) return;
@@ -301,20 +336,25 @@ function openLightbox(index) {
   lightboxImg.classList.add("transitioning");
 
   setTimeout(() => {
-    lightboxImg.src = img.src;
-    lightboxImg.onload = () => lightbox.classList.add("loaded");
+  lightboxImg.src = img.src;
+  lightboxImg.onload = () => lightbox.classList.add("loaded");
 
-    leftText.innerHTML = img.dataset.left || "";
-    rightText.innerHTML = img.dataset.right || "";
+  leftText.innerHTML = img.dataset.left || "";
+  rightText.innerHTML = img.dataset.right || "";
 
-    updateDots();
-    lightboxImg.classList.remove("transitioning");
+  // ✨ re-trigger caption animation
+  lightbox.classList.remove("show-text");
+  requestAnimationFrame(() => {
+    lightbox.classList.add("show-text");
+  });
 
-    preloadImage(currentThumbs[(index + 1) % currentThumbs.length]?.src);
-    preloadImage(currentThumbs[(index - 1 + currentThumbs.length) % currentThumbs.length]?.src);
-  }, 150);
+  updateDots();
+  lightboxImg.classList.remove("transitioning");
+
+  preloadImage(currentThumbs[(index + 1) % currentThumbs.length]?.src);
+  preloadImage(currentThumbs[(index - 1 + currentThumbs.length) % currentThumbs.length]?.src);
+}, 150);
 }
-
 
 
 
@@ -347,23 +387,6 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowRight") nextBtn.click();
   if (e.key === "ArrowLeft") prevBtn.click();
   if (e.key === "Escape") lightbox.classList.add("hidden");
-});
-
-
-// ==============================
-// 📱 SWIPE NAVIGATION
-// ==============================
-lightbox.addEventListener("touchend", e => {
-  if (isZoomed) return; // 🚫 don’t swipe while zoomed
-
-  const endX = e.changedTouches[0].clientX;
-  const diff = startX - endX;
-
-  if (Math.abs(diff) > 50) {
-    diff > 0
-      ? openLightbox((currentIndex + 1) % currentThumbs.length)
-      : openLightbox((currentIndex - 1 + currentThumbs.length) % currentThumbs.length);
-  }
 });
 
 

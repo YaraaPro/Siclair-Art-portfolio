@@ -349,6 +349,14 @@ html {
   cursor: grab;
 }
 
+.lightbox-image {
+  touch-action: manipulation;
+}
+
+.lightbox-image.zoomed {
+  touch-action: none;
+}
+
 
 .lightbox-image.dragging {
   cursor: grabbing;
