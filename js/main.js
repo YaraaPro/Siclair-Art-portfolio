@@ -1,3 +1,4 @@
+
 // ==============================
 // 🌌 STARFIELD CANVAS
 // ==============================
@@ -135,45 +136,36 @@ function resetZoom() {
   updateTransform();
 }
 
-
-
-/* CLICK / DOUBLE TAP TO ZOOM */
-let lastTapTime = 0;
+// ==============================
+// 🔍 ZOOM (DESKTOP + MOBILE)
+// ==============================
+const ZOOM_SCALE = 2;
 const DOUBLE_TAP_DELAY = 300;
+let lastTapTime = 0;
 
-lightboxImg.addEventListener("touchend", e => {
+/* Desktop: double-click */
+lightboxImg.addEventListener("dblclick", e => {
   e.preventDefault();
+  toggleZoom();
+});
 
+/* Mobile: double-tap */
+lightboxImg.addEventListener("touchend", e => {
   const now = Date.now();
-  const tapGap = now - lastTapTime;
-
-  if (tapGap < DOUBLE_TAP_DELAY) {
-    // 🔍 DOUBLE TAP → TOGGLE ZOOM
-    isZoomed = !isZoomed;
-    scale = isZoomed ? 2 : 1;
-    posX = 0;
-    posY = 0;
-    updateTransform();
+  if (now - lastTapTime < DOUBLE_TAP_DELAY) {
+    toggleZoom();
   }
-
   lastTapTime = now;
 }, { passive: false });
 
-
-/* DOUBLE TAP (mobile) */
-lightboxImg.addEventListener("touchend", e => {
-  const now = Date.now();
-  if (now - lastTap < 300) {
-    isZoomed = !isZoomed;
-    scale = isZoomed ? 2 : 1;
-    posX = 0;
-    posY = 0;
-    lightboxImg.classList.toggle("zoomed", isZoomed);
-    updateTransform();
-  }
-  lastTap = now;
-});
-
+function toggleZoom() {
+  isZoomed = !isZoomed;
+  scale = isZoomed ? ZOOM_SCALE : 1;
+  posX = 0;
+  posY = 0;
+  lightboxImg.classList.toggle("zoomed", isZoomed);
+  updateTransform();
+}
 
 
 /* DRAG START */
@@ -186,16 +178,12 @@ function startDrag(x, y) {
 
 lightboxImg.addEventListener("mousedown", e => {
   if (!isZoomed) return;
-  e.preventDefault();
-  startDrag(e.clientX, e.clientY);
+  isDragging = true;
+  lastX = e.clientX;
+  lastY = e.clientY;
 });
 
-lightboxImg.addEventListener("touchstart", e => {
-  if (!isZoomed) return;
-  e.preventDefault();
-  const t = e.touches[0];
-  startDrag(t.clientX, t.clientY);
-}, { passive: false });
+
 
 lightboxImg.addEventListener("touchstart", e => {
   if (!isZoomed) return;
@@ -228,8 +216,10 @@ function dragMove(x, y) {
 }
 
 document.addEventListener("mousemove", e => {
+  if (!isDragging) return;
   dragMove(e.clientX, e.clientY);
 });
+
 
 document.addEventListener("touchmove", e => {
   if (!isDragging) return;
@@ -269,9 +259,8 @@ function endDrag() {
 }
 
 document.addEventListener("mouseup", endDrag);
-document.addEventListener("touchend", endDrag);
-
-lightboxImg.addEventListener("touchend", () => {
+document.addEventListener("touchend", () => {
+  endDrag();
   hasMoved = false;
 });
 
