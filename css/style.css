@@ -118,6 +118,189 @@ body::before {
   100% { transform: translate(0px, 0px) scale(1); }
 }
 
+/* =========================
+   HOME HERO
+========================= */
+
+.home-hero {
+  width: 100%;
+  height: 70vh;
+  overflow: hidden;
+}
+
+.home-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.9);
+}
+
+.hero-image-wrapper {
+  position: relative;
+  display: inline-block;
+  border-radius: 18px;
+  padding: 10px;
+}
+
+.hero-image-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(216,180,254,0.6), transparent 90%),
+    radial-gradient(circle at 80% 70%, rgba(167,139,250,0.6), transparent 90%),
+    linear-gradient(120deg, #a78bfa, #f0abfc, #7dd3fc);
+  filter: blur(100px);
+  opacity: 0.9;
+  z-index: -1;
+  animation: glow-pulse 8s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.hero-image-wrapper::after {
+  content: "✦ ✧ ✦";
+  position: absolute;
+  top: -14px;
+  right: 16px;
+  font-size: 0.9rem;
+  color: #e9d5ff;
+  opacity: 0.7;
+  letter-spacing: 6px;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+
+/* =========================
+   ABOUT SECTION
+========================= */
+
+.about-section {
+  max-width: 720px;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.about-section h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.about-section p {
+  font-size: 1rem;
+  line-height: 1.7;
+  opacity: 0.85;
+  margin-bottom: 1.2rem;
+}
+
+.hero-title {
+  margin-top: 28px;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 600;
+  text-align: center;
+  color: #f5f3ff;
+  position: relative;
+  text-shadow:
+    0 0 12px rgba(216,180,254,0.6),
+    0 0 24px rgba(167,139,250,0.4);
+}
+
+.hero-title::before,
+.hero-title::after {
+  content: "✦";
+  font-size: 0.9rem;
+  color: #d8b4fe;
+  margin: 0 12px;
+  opacity: 0.6;
+  animation: twinkle 5s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.hero-title::before {
+  left: -36px;
+}
+
+.hero-title::after {
+  right: -36px;
+  animation-delay: 2s;
+}
+
+@keyframes star-float {
+  0%, 100% {
+    transform: translateY(-50%) translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-50%) translateY(-6px);
+    opacity: 1;
+  }
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  text-align: center;
+  margin-top: 32px;
+
+  background: linear-gradient(
+    120deg,
+    #f5f3ff,
+    #d8b4fe,
+    #7f57f5,
+    #f0abfc,
+    #f5f3ff
+  );
+
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+
+  animation: gradient-drift 10s ease-in-out infinite;
+
+  /* soft glow */
+  text-shadow:
+    0 0 12px rgba(216,180,254,0.35),
+    0 0 24px rgba(167,139,250,0.25);
+}
+
+@keyframes gradient-drift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+/* =========================
+   MOBILE TWEAKS
+========================= */
+
+@media (max-width: 700px) {
+  .home-hero {
+    height: 45vh;
+  }
+
+  .about-section h1 {
+    font-size: 1.8rem;
+  }
+}
+
+
 /* Category section styling */
 .category {
   padding: 4rem 2rem;
@@ -697,5 +880,126 @@ html {
   /* Remove hover lift on touch devices */
   #site-footer:hover {
     transform: translateX(-50%);
+  }
+}
+
+/* =========================
+   ENTRANCE ANIMATIONS
+========================= */
+
+.fade-in,
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.fade-in {
+  transform: none;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transition: opacity 1.2s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ==============================
+   🌿 ENTRANCE ANIMATION
+============================== */
+
+.animate-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+}
+
+.animate-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ==============================
+   🏞️ HERO LAYOUT
+============================== */
+
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 8rem 6vw;
+}
+
+.hero-image-wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateY(0);
+  transition: transform 0.1s linear;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+
+@media (max-width: 768px) {
+  .hero-image {
+    transform: none !important;
+  }
+}
+
+@keyframes breathe {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.01) translateY(-6px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.home-hero-image {
+  animation: breathe 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-image {
+    animation: none;
   }
 }
