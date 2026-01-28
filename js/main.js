@@ -86,6 +86,28 @@ document.querySelectorAll(".gallery-wrapper").forEach(wrapper => {
 });
 
 
+// =========================
+// ✨ ENTRANCE ANIMATIONS
+// =========================
+
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.2 }
+);
+
+document.querySelectorAll(".fade-in, .reveal").forEach(el => {
+  observer.observe(el);
+});
+
+
+
 // ==============================
 // 🌙 LIGHTBOX CORE (READY-TO-PASTE)
 // ==============================
@@ -541,3 +563,4 @@ window.addEventListener("scroll", () => {
     : footer.classList.remove("hidden");
   lastScrollY = window.scrollY;
 });
+
