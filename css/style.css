@@ -151,6 +151,7 @@ body::before {
   height: 100%;
   object-fit: cover;
   z-index: 1;
+    object-position: center top;
 
   /* dreamy base filter */
   filter:
@@ -158,6 +159,13 @@ body::before {
     contrast(1.05)
     brightness(0.95);
 }
+
+@media (min-width: 1024px) {
+  .home-hero-image {
+    object-position: center 28%;
+  }
+}
+
 
 .hero-galaxy {
   position: absolute;
@@ -328,19 +336,108 @@ body::before {
     0 0 24px rgba(167,139,250,0.4);
 }
 
-.hero-title::before,
-.hero-title::after {
-  content: "✦";
-  font-size: 0.9rem;
+.hero-star {
+  text-decoration: none;
   color: #d8b4fe;
-  margin: 0 12px;
+  font-size: 0.9rem;
   opacity: 0.6;
+  margin: 0 12px;
+  display: inline-block;
+cursor: pointer;
+position: relative;
+  z-index: 2;
+
   animation: twinkle 5s ease-in-out infinite;
 }
 
-@keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
+.constellation-line {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  width: calc(100% - 5.5rem); /* distance between stars */
+  height: 1px;
+
+  transform: translate(-50%, -50%);
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(216,180,254,0.65),
+    transparent
+  );
+
+  opacity: 0;
+  filter: blur(0.4px);
+  pointer-events: none;
+
+  transition: opacity 0.4s ease;
+}
+
+.hero-title-wrap:hover .constellation-line {
+  opacity: 1;
+  filter: blur(0.3px) brightness(1.2);
+}
+
+
+.hero-star.right {
+  animation-delay: 2s;
+}
+
+.hero-star:hover {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='18' font-size='18'>✦</text></svg>") 12 12, pointer;
+}
+
+
+.hero-title-wrap:hover .constellation-line {
+  opacity: 1;
+}
+
+.constellation-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.8),
+    transparent
+  );
+
+  opacity: 0;
+}
+
+.hero-title-wrap:hover .constellation-line::after {
+  animation: constellation-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes constellation-pulse {
+  0% {
+    opacity: 0;
+    transform: translateX(-20%);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(20%);
+  }
+}
+
+
+.hero-title-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+
+.hero-title {
+  pointer-events: auto;
+}
+
+.hero-title > :not(.hero-star) {
+  pointer-events: none;
 }
 
 .hero-title::before {
