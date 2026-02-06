@@ -219,50 +219,89 @@ body::before {
 @media (min-width: 1024px) {
   .hero-stars {
     background-image:
-      radial-gradient(2.5px 2.5px at 5% 10%, rgba(255,255,255,0.95), transparent),
-      radial-gradient(2px 2px at 15% 40%, rgba(255,255,255,0.85), transparent),
-      radial-gradient(3px 3px at 30% 20%, rgba(255,255,255,1), transparent),
-      radial-gradient(2.2px 2.2px at 45% 60%, rgba(255,255,255,0.8), transparent),
-      radial-gradient(2px 2px at 55% 30%, rgba(255,255,255,0.9), transparent),
-      radial-gradient(3px 3px at 65% 75%, rgba(255,255,255,1), transparent),
-      radial-gradient(2px 2px at 75% 50%, rgba(255,255,255,0.85), transparent),
-      radial-gradient(3.2px 3.2px at 85% 20%, rgba(255,255,255,1), transparent),
+      radial-gradient(2.5px 2.5px at 10% 15%, rgba(255,255,255,0.95), transparent),
+      radial-gradient(2px 2px at 20% 45%, rgba(255,255,255,0.85), transparent),
+      radial-gradient(3px 3px at 35% 20%, rgba(255,255,255,1), transparent),
+      radial-gradient(2.2px 2.2px at 48% 60%, rgba(255,255,255,0.8), transparent),
+      radial-gradient(2px 2px at 60% 35%, rgba(255,255,255,0.9), transparent),
+      radial-gradient(3px 3px at 70% 75%, rgba(255,255,255,1), transparent),
+      radial-gradient(2px 2px at 80% 55%, rgba(255,255,255,0.85), transparent),
+      radial-gradient(3.2px 3.2px at 88% 22%, rgba(255,255,255,1), transparent),
       radial-gradient(2.4px 2.4px at 95% 70%, rgba(255,255,255,0.9), transparent);
   }
     .hero-stars-pulse {
-    filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+    }
   }
-}
 
 
 
-.hero-stars {
+.hero-stars,
+.hero-stars-pulse {
   position: absolute;
-  inset: 0;
-  z-index: 3;
+  width: 280px;
+  height: 240px;
+  left: 50%;
+  top: -70px;
+  transform: translate(-50%, 0) scale(0.9);
+  z-index: 6;
   pointer-events: none;
 
-  background-image:
-    radial-gradient(1.5px 1.5px at 5% 10%, rgba(255,255,255,0.9), transparent),
-    radial-gradient(1px 1px at 15% 40%, rgba(255,255,255,0.8), transparent),
-    radial-gradient(2px 2px at 30% 20%, rgba(255,255,255,1), transparent),
-    radial-gradient(1.2px 1.2px at 45% 60%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(1px 1px at 55% 30%, rgba(255,255,255,0.8), transparent),
-    radial-gradient(1.8px 1.8px at 65% 75%, rgba(255,255,255,0.95), transparent),
-    radial-gradient(1px 1px at 75% 50%, rgba(255,255,255,0.7), transparent),
-    radial-gradient(2px 2px at 85% 20%, rgba(255,255,255,1), transparent),
-    radial-gradient(1.2px 1.2px at 95% 70%, rgba(255,255,255,0.85), transparent);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 
-  animation: stars-drift 50s linear infinite;
+  opacity: 0;
+  transition: opacity 350ms ease, transform 350ms ease;
+
+  /* Heart silhouette (clip-path + mask for broader support) */
+  clip-path: polygon(
+    50% 12%,
+    58% 4%,
+    73% 2%,
+    86% 10%,
+    92% 24%,
+    90% 38%,
+    84% 52%,
+    74% 66%,
+    62% 79%,
+    50% 92%,
+    38% 79%,
+    26% 66%,
+    16% 52%,
+    10% 38%,
+    8% 24%,
+    14% 10%,
+    27% 2%,
+    42% 4%
+  );
+
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 180'%3E%3Cpath fill='white' d='M100 28 C120 0 180 4 180 58 C180 110 122 140 100 172 C78 140 20 110 20 58 C20 4 80 0 100 28 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 180'%3E%3Cpath fill='white' d='M100 28 C120 0 180 4 180 58 C180 110 122 140 100 172 C78 140 20 110 20 58 C20 4 80 0 100 28 Z'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.hero-stars {
+  z-index: 6;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
+
+  animation: heart-float 8s ease-in-out infinite;
 }
 
 
-@keyframes stars-drift {
-  from {
-    transform: translateY(0);
+@keyframes heart-float {
+  0%, 100% {
+    transform: translate(-50%, -10%) scale(1);
+    opacity: 0.9;
   }
-  to {
-    transform: translateY(-120px);
+  50% {
+    transform: translate(-50%, -12%) scale(1.02);
+    opacity: 1;
   }
 }
 
@@ -277,17 +316,17 @@ body::before {
 
 
 .hero-stars-pulse {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-
-  background-image:
-    radial-gradient(2px 2px at 25% 35%, rgba(255,255,255,1), transparent),
-    radial-gradient(1.5px 1.5px at 50% 50%, rgba(255,255,255,0.9), transparent),
-    radial-gradient(2px 2px at 75% 65%, rgba(255,255,255,1), transparent);
+  z-index: 7;
+  opacity: 0.6;
+  filter: blur(0.6px);
 
   animation: stars-pulse 6s ease-in-out infinite;
+}
+
+.hero-stars.is-visible,
+.hero-stars-pulse.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
 }
 
 @keyframes stars-pulse {
@@ -325,12 +364,13 @@ body::before {
 }
 
 .hero-title {
-  margin-top: 28px;
+  margin-top: 0;
   font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 600;
   text-align: center;
   color: #f5f3ff;
   position: relative;
+  z-index: 5;
   text-shadow:
     0 0 12px rgba(216,180,254,0.6),
     0 0 24px rgba(167,139,250,0.4);
@@ -344,11 +384,38 @@ body::before {
   margin: 0 12px;
   display: inline-block;
 cursor: pointer;
-position: relative;
-  z-index: 2;
+  pointer-events: auto;
+  position: relative;
+  z-index: 9999;
 
   animation: twinkle 5s ease-in-out infinite;
 }
+
+button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  font: inherit;
+  color: inherit;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  outline: none;
+  box-shadow: none;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 
 .constellation-line {
   position: absolute;
@@ -356,6 +423,7 @@ position: relative;
   left: 50%;
   width: calc(100% - 5.5rem); /* distance between stars */
   height: 1px;
+  display: none;
 
   transform: translate(-50%, -50%);
 
@@ -425,10 +493,13 @@ position: relative;
   }
 }
 
-
 .hero-title-wrap {
   position: relative;
-  display: inline-block;
+  display: block;
+  width: 100%;
+  min-height: 0;
+  padding-top: 140px; /* space for heart above the title */
+  z-index: 1;
 }
 
 
@@ -436,9 +507,6 @@ position: relative;
   pointer-events: auto;
 }
 
-.hero-title > :not(.hero-star) {
-  pointer-events: none;
-}
 
 .hero-title::before {
   left: -36px;
@@ -508,6 +576,38 @@ position: relative;
     font-size: 1.8rem;
   }
 }
+
+/* sigil */
+
+.sigil-wrapper {
+  position: absolute;
+  top: calc(50% - 70px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sigil-wrapper.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sigil-star {
+  position: absolute;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #f5f3ff;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+
 
 
 /* Category section styling */

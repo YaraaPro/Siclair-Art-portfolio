@@ -35,20 +35,39 @@
     class="home-hero-image" />
 
   <div class="hero-nebula"></div>
-  <div class="hero-stars"></div>
-  <div class="hero-stars-pulse"></div>
 </section>
 
 
 <section class="about-section reveal">
  <div class="hero-title-wrap">
-  <h1 class="hero-title">
-    <a href="/your-secret-page.html" class="hero-star left" aria-label="Secret link">✦</a>
-    Hello
-    <a href="freebies.html" class="hero-star right" aria-label="Secret link">✦</a>
-  </h1>
+  <div class="hero-stars" aria-hidden="true"></div>
+  <div class="hero-stars-pulse" aria-hidden="true"></div>
 
-  <span class="constellation-line"></span>
+  <div class="sigil-wrapper" aria-hidden="true">
+  <svg class="sigil-svg" viewBox="0 0 200 180">
+    <line />
+    <line />
+    <line />
+    <line />
+    <line />
+    <line />
+  </svg>
+
+  <button class="sigil-star" data-step="1" style="left:100px; top:58px;">✦</button>
+  <button class="sigil-star" data-step="2" style="left:150px; top:48px;">✦</button>
+  <button class="sigil-star" data-step="3" style="left:160px; top:98px;">✦</button>
+  <button class="sigil-star" data-step="4" style="left:100px; top:160px;">✦</button>
+  <button class="sigil-star" data-step="5" style="left:40px; top:98px;">✦</button>
+  <button class="sigil-star" data-step="6" style="left:50px; top:48px;">✦</button>
+</div>
+
+
+  <h1 class="hero-title">
+    <button class="hero-star left" aria-label="Secret sigil star">✦</button>
+
+    Hello
+    <button class="hero-star left" aria-label="Secret sigil star">✦</button>
+  </h1>
 </div>
 
 
@@ -83,3 +102,4 @@
   <script src="js/main.js"></script>
 </body>
 </html>
+

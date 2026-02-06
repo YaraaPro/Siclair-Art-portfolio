@@ -107,7 +107,6 @@ document.querySelectorAll(".fade-in, .reveal").forEach(el => {
 });
 
 
-
 // ==============================
 // 🌙 LIGHTBOX CORE (READY-TO-PASTE)
 // ==============================
@@ -120,6 +119,7 @@ const dotsContainer = document.querySelector(".lightbox-dots");
 const prevBtn = document.querySelector(".lightbox-arrow.left");
 const nextBtn = document.querySelector(".lightbox-arrow.right");
 
+if (lightbox && lightboxImg && closeBtn && dotsContainer && prevBtn && nextBtn) {
 let currentThumbs = [];
 let currentIndex = 0;
 
@@ -549,18 +549,22 @@ function preloadImage(src) {
   img.src = src;
 }
 
+}
 
 // ==============================
-// 📱 FOOTER AUTO-HIDE (MOBILE)
+// HERO STAR → SHOW SIGIL
 // ==============================
-const footer = document.getElementById("site-footer");
-let lastScrollY = window.scrollY;
 
-window.addEventListener("scroll", () => {
-  if (window.innerWidth > 600) return;
-  window.scrollY > lastScrollY
-    ? footer.classList.add("hidden")
-    : footer.classList.remove("hidden");
-  lastScrollY = window.scrollY;
+const heroStars = document.querySelectorAll(".hero-star");
+const sigil = document.querySelector(".sigil-wrapper");
+const heartStars = document.querySelector(".hero-stars");
+const heartPulse = document.querySelector(".hero-stars-pulse");
+
+heroStars.forEach(star => {
+  star.addEventListener("click", () => {
+    console.log("STAR CLICKED");
+    sigil.classList.toggle("active");
+    heartStars?.classList.toggle("is-visible");
+    heartPulse?.classList.toggle("is-visible");
+  });
 });
-
