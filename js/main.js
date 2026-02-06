@@ -71,6 +71,44 @@ function animateStars() {
 }
 animateStars();
 
+// ==============================
+// MOBILE NAV TOGGLE
+// ==============================
+const navToggle = document.querySelector(".nav-toggle");
+const navBar = document.querySelector(".navbar");
+const navLinks = document.querySelector(".navbar .nav-links");
+
+if (navToggle && navBar && navLinks) {
+  const mq = window.matchMedia("(max-width: 800px)");
+
+  const closeMenu = () => {
+    if (!navBar.classList.contains("open")) return;
+    navBar.classList.remove("open");
+    navToggle.setAttribute("aria-expanded", "false");
+    navToggle.setAttribute("aria-label", "Open menu");
+  };
+
+  navToggle.addEventListener("click", () => {
+    const isOpen = navBar.classList.toggle("open");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+    navToggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+  });
+
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      if (mq.matches) closeMenu();
+    });
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeMenu();
+  });
+
+  mq.addEventListener("change", e => {
+    if (!e.matches) closeMenu();
+  });
+}
+
 
 // ==============================
 // 🖼️ PORTFOLIO SCROLL ARROWS
