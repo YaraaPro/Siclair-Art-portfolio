@@ -85,10 +85,10 @@ body {
   position: absolute;
   inset: 7px;
   border-radius: 50%;
-  border: 1px dotted rgba(216, 180, 254, 0.35);
-  opacity: 0.6;
-  animation: nav-orbit 9s linear infinite;
-  filter: drop-shadow(0 0 4px rgba(216, 180, 254, 0.2));
+  border: 1px dotted rgba(216, 180, 254, 0.55);
+  opacity: 0.85;
+  animation: nav-orbit 6s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(216, 180, 254, 0.3));
 }
 
 .nav-toggle-line {
@@ -127,20 +127,18 @@ body {
   box-shadow:
     0 0 6px rgba(255,255,255,0.6),
     0 0 10px rgba(167,139,250,0.5);
-  animation: nav-twinkle 6s ease-in-out infinite;
+  top: 50%;
+  left: 50%;
+  animation: nav-orbit-star 7s linear infinite, nav-twinkle 6s ease-in-out infinite;
   opacity: 0.6;
 }
 
 .nav-toggle::before {
-  top: 10px;
-  left: 12px;
-  animation-delay: 0.6s;
+  animation-delay: 0s, 0.6s;
 }
 
 .nav-toggle::after {
-  bottom: 10px;
-  right: 11px;
-  animation-delay: 1.8s;
+  animation-delay: -3.5s, 1.8s;
 }
 
 .nav-toggle-line:nth-child(2) { top: 16px; }
@@ -170,8 +168,13 @@ body {
 }
 
 @keyframes nav-twinkle {
-  0%, 100% { transform: scale(0.9); opacity: 0.4; }
-  50% { transform: scale(1); opacity: 0.7; }
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes nav-orbit-star {
+  0% { transform: translate(-50%, -50%) rotate(0deg) translateX(13px); }
+  100% { transform: translate(-50%, -50%) rotate(360deg) translateX(13px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
