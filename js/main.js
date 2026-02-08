@@ -156,6 +156,24 @@ document.querySelectorAll(".fade-in, .reveal").forEach(el => {
   observer.observe(el);
 });
 
+// ==============================
+// DEV SHORTCUT TO PROJECTVC
+// ==============================
+const params = new URLSearchParams(window.location.search);
+if (params.has("dev")) {
+  const footer = document.getElementById("site-footer");
+  const devLink = document.createElement("a");
+  devLink.href = "projectVC.html";
+  devLink.className = "dev-access-link";
+  devLink.textContent = "Dev: ProjectVC";
+  devLink.setAttribute("aria-label", "Developer shortcut to ProjectVC");
+  if (footer) {
+    footer.appendChild(devLink);
+  } else {
+    document.body.appendChild(devLink);
+  }
+}
+
 
 // ==============================
 // 🌙 LIGHTBOX CORE (READY-TO-PASTE)

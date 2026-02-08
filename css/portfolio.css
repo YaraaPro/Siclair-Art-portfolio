@@ -1,0 +1,477 @@
+/* Portfolio page styles */
+/* Category section styling */
+.category {
+  padding: 4rem 2rem;
+  border-top: 1px solid rgba(196,181,253,0.2);
+  border-bottom: 1px solid rgba(196,181,253,0.2);
+  backdrop-filter: blur(4px);
+  margin: 2rem 0;
+}
+
+/* Category headings */
+.category h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+
+  /* Gradient text */
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; /* makes the gradient visible */
+
+  /* Optional glow */
+  text-shadow: 0 0 6px rgba(139,92,246,0.4);
+}
+
+
+.event-group {
+  margin-bottom: 2.5rem;
+}
+
+.event-group h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: #e9d5ff;
+  margin-bottom: 0.6rem;
+  text-shadow: 0 0 6px rgba(139,92,246,0.4);
+}
+
+
+/* Gallery grid */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Individual images */
+.gallery img {
+  width: 100%;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(139,92,246,0.4);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+/* Wrapper with arrows */
+.gallery-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Scrollable gallery */
+.gallery {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Hide scrollbar */
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+.gallery {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Horizontal thumbnail gallery */
+.gallery {
+  display: flex;           /* arrange children in a row */
+  gap: 1rem;               /* space between thumbnails */
+  overflow-x: auto;        /* scrollable if too wide */
+  padding: 1rem 0;         /* vertical padding */
+  scroll-behavior: smooth; /* smooth scrolling when using arrows */
+}
+
+/* Optional: hide scrollbar on modern browsers */
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+.gallery {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none;    /* Firefox */
+}
+
+/* Thumbnails */
+.gallery img {
+  flex: 0 0 auto;      /* prevent shrinking, keep width */
+  width: 180px;        /* thumbnail width */
+  height: 120px;       /* thumbnail height */
+  object-fit: cover;   /* crop to fit container */
+  object-position: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  flex-shrink: 0; /* CRUCIAL for horizontal scroll */
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(139,92,246,0.4);
+}
+
+/* Thumbnail title */
+
+.thumb-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.thumb-item figcaption {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.8);
+  text-align: center;
+  max-width: 180px;
+}
+
+
+/* Scroll arrows */
+.scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;       /* remove background circle */
+  border: none;           /* remove border */
+  color: white;           /* simple white arrow */
+  font-size: 2rem;        /* adjust size */
+  padding: 0;             /* remove extra padding */
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s;
+}
+
+.scroll-arrow:hover {
+  color: #ff77ff; /* or any soft cosmic glow */
+}
+
+
+.scroll-arrow:hover {
+  color: #8b5cf6;         /* optional: glow color on hover */
+}
+
+.scroll-arrow.left {
+  left: 0.3rem;           /* small offset from left */
+}
+
+.scroll-arrow.right {
+  right: 0.3rem;          /* small offset from right */
+}
+
+/* lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 20, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.lightbox.hidden {
+  display: none;
+}
+
+.lightbox-content {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  max-width: 90vw;
+  max-height: 85vh;
+  align-items: center;
+}
+
+.lightbox-image {
+  max-height: 85vh;
+  max-width: 60vw;
+  border-radius: 8px;
+
+  user-select: none;
+  -webkit-user-drag: none;
+
+  cursor: zoom-in;
+  transition: opacity 0.3s ease, transform 0.25s ease;
+
+  touch-action: manipulation;
+}
+
+.lightbox-image.zoomed {
+  cursor: grab;
+  touch-action: none; /* JS handles gestures when zoomed */
+}
+
+.lightbox-image.dragging {
+  cursor: grabbing;
+}
+
+.lightbox-image.transitioning {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+
+.lightbox-text a {
+  color: #d8b4fe;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.lightbox-text a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  opacity: 0.6;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.lightbox-text {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.lightbox.show-text .lightbox-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.lightbox-text a:hover::after {
+  transform: scaleX(1);
+}
+
+.lightbox-text a:hover {
+  color: #f5d0fe;
+}
+
+@media (max-width: 700px) {
+  .lightbox-text {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}
+
+/* Make sure image always sits above text when zoomed */
+.lightbox-image {
+  position: relative;
+  z-index: 2; /* base z-index for unzoomed image */
+  transition: transform 0.25s ease, z-index 0s 0s;
+}
+
+/* When zoomed, raise image above all text */
+.lightbox-image.zoomed {
+  z-index: 10;
+}
+
+/* Base text style */
+.lightbox-text {
+  position: relative;
+  z-index: 1; /* behind normal image */
+  opacity: 1;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Links style */
+.lightbox-text a {
+  color: #d8b4fe;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+.lightbox-text a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+  opacity: 0.6;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.lightbox-text a:hover::after {
+  transform: scaleX(1);
+}
+.lightbox-text a:hover {
+  color: #f5d0fe;
+}
+
+/* Mobile text size */
+@media (max-width: 700px) {
+  .lightbox-text {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+}
+
+/* ===================== */
+/* Image above everything */
+.lightbox-image {
+  position: relative;
+  z-index: 5; /* always on top */
+}
+
+/* ===================== */
+/* When lightbox is zoomed, fade & push all text behind */
+#lightbox.zoomed .lightbox-text {
+  z-index: 1;         /* behind image */
+  opacity: 0.3;       /* optional fade */
+  pointer-events: none; /* prevent accidental taps */
+}
+
+
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  text-shadow:
+    0 0 8px rgba(139,92,246,0.6),
+    0 0 12px rgba(217,70,239,0.4);
+  padding: 0.5rem;
+  transition: color 0.2s, transform 0.2s;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.lightbox-arrow.left {
+  left: 1rem;
+}
+
+.lightbox-arrow.right {
+  right: 1rem;
+}
+
+.lightbox-arrow:hover {
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Hide arrows on very small screens (swipe only) */
+@media (max-width: 500px) {
+  .lightbox-arrow {
+    display: none;
+  }
+}
+
+
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .lightbox::after {
+    position: absolute;
+    bottom: 1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+  }
+}
+
+
+@media (max-width: 700px) {
+  .lightbox-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .lightbox-image {
+    max-width: 90vw;
+  }
+}
+
+.lightbox-dots {
+  position: absolute;
+  bottom: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 6; /* ABOVE image & text */
+}
+
+.lightbox-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  box-shadow: 0 0 6px rgba(255,255,255,0.2);
+}
+
+.lightbox-dot.active {
+  background: #ffffff;
+  box-shadow:
+    0 0 6px rgba(255,255,255,0.9),
+    0 0 12px rgba(139,92,246,0.6);
+  transform: scale(1.4);
+}
+
+.lightbox-loader {
+  position: absolute;
+  width: 60vw;
+  height: 70vh;
+  max-width: 800px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.05) 25%,
+    rgba(255,255,255,0.15) 37%,
+    rgba(255,255,255,0.05) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+.lightbox.loaded .lightbox-loader {
+  display: none;
+}
+
+
