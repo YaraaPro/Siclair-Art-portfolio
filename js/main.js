@@ -132,7 +132,19 @@ const observer = new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
+        if (prefersReducedMotion) {
+          entry.target.classList.add("visible");
+        } else {
+          const delay = Number.parseInt(entry.target.dataset.revealDelay, 10);
+          if (!Number.isNaN(delay)) {
+            entry.target.style.transitionDelay = `${delay}ms`;
+          }
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              entry.target.classList.add("visible");
+            });
+          });
+        }
         observer.unobserve(entry.target);
       }
     });

@@ -41,6 +41,18 @@ body {
   color: var(--accent);
 }
 
+.logo {
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: #f5f3ff;
+  text-shadow: 0 0 10px rgba(216, 180, 254, 0.35);
+  line-height: 1.1;
+  max-width: 100%;
+  min-width: 0;
+  word-break: break-word;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -51,24 +63,32 @@ body {
   position: relative;
   width: 46px;
   height: 46px;
+  min-width: 46px;
+  min-height: 46px;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 46px;
   border-radius: 999px;
   background:
-    radial-gradient(circle at 30% 30%, rgba(216,180,254,0.25), transparent 55%),
-    rgba(7, 7, 20, 0.6);
-  border: 1px solid rgba(139, 92, 246, 0.45);
+    radial-gradient(circle at 30% 30%, rgba(216,180,254,0.18), transparent 58%),
+    radial-gradient(circle at 70% 70%, rgba(236,72,153,0.12), transparent 62%),
+    rgba(6, 8, 22, 0.65);
+  border: 1px solid rgba(216, 180, 254, 0.35);
   box-shadow:
-    0 0 18px rgba(139, 92, 246, 0.25),
-    inset 0 0 10px rgba(255, 255, 255, 0.05);
+    0 0 12px rgba(139, 92, 246, 0.2),
+    0 0 20px rgba(236, 72, 153, 0.12),
+    inset 0 0 8px rgba(255, 255, 255, 0.04);
   cursor: pointer;
+  overflow: hidden;
 }
 
 .nav-toggle-orbit {
   position: absolute;
   inset: 7px;
   border-radius: 50%;
-  border: 1px dashed rgba(216, 180, 254, 0.55);
-  opacity: 0.9;
-  animation: nav-orbit 6s linear infinite;
+  border: 1px dotted rgba(216, 180, 254, 0.35);
+  opacity: 0.6;
+  animation: nav-orbit 9s linear infinite;
+  filter: drop-shadow(0 0 4px rgba(216, 180, 254, 0.2));
 }
 
 .nav-toggle-line {
@@ -77,10 +97,10 @@ body {
   width: 22px;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(216,180,254,0.9));
+  background: linear-gradient(90deg, rgba(255,255,255,0.85), rgba(167,139,250,0.8), rgba(236,72,153,0.6));
   transform: translateX(-50%);
   transition: transform 0.25s ease, opacity 0.2s ease;
-  box-shadow: 0 0 8px rgba(216, 180, 254, 0.5);
+  box-shadow: 0 0 6px rgba(216, 180, 254, 0.35);
 }
 
 .nav-toggle-line::after {
@@ -88,12 +108,39 @@ body {
   position: absolute;
   right: -3px;
   top: 50%;
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
   border-radius: 50%;
   background: #ffffff;
   transform: translateY(-50%);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+.nav-toggle::before,
+.nav-toggle::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 6px rgba(255,255,255,0.6),
+    0 0 10px rgba(167,139,250,0.5);
+  animation: nav-twinkle 6s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.nav-toggle::before {
+  top: 10px;
+  left: 12px;
+  animation-delay: 0.6s;
+}
+
+.nav-toggle::after {
+  bottom: 10px;
+  right: 11px;
+  animation-delay: 1.8s;
 }
 
 .nav-toggle-line:nth-child(2) { top: 16px; }
@@ -122,8 +169,17 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+@keyframes nav-twinkle {
+  0%, 100% { transform: scale(0.9); opacity: 0.4; }
+  50% { transform: scale(1); opacity: 0.7; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nav-toggle-orbit {
+    animation: none;
+  }
+  .nav-toggle::before,
+  .nav-toggle::after {
     animation: none;
   }
 }
@@ -131,6 +187,10 @@ body {
 @media (max-width: 800px) {
   .navbar {
     padding: 0.9rem 1.2rem;
+  }
+
+  .logo {
+    max-width: calc(100% - 72px);
   }
 
   .nav-toggle {
@@ -147,13 +207,17 @@ body {
     flex-direction: column;
     align-items: stretch;
     gap: 0.4rem;
-    padding: 0.8rem;
-    background: rgba(8, 8, 24, 0.88);
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    border-radius: 16px;
+    padding: 0.9rem;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(139,92,246,0.18), transparent 60%),
+      radial-gradient(circle at 80% 0%, rgba(236,72,153,0.12), transparent 65%),
+      rgba(6, 8, 22, 0.9);
+    border: 1px solid rgba(216, 180, 254, 0.3);
+    border-radius: 18px;
     box-shadow:
-      0 12px 30px rgba(2, 6, 23, 0.55),
-      0 0 18px rgba(139, 92, 246, 0.25);
+      0 12px 30px rgba(2, 6, 23, 0.5),
+      0 0 12px rgba(139, 92, 246, 0.2);
+    backdrop-filter: blur(12px);
     opacity: 0;
     transform: translateY(-8px) scale(0.98);
     pointer-events: none;
@@ -1486,3 +1550,4 @@ html {
     animation: none;
   }
 }
+
