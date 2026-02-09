@@ -1,1 +1,182 @@
 /* Commissions page styles */
+
+.commissions {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
+}
+
+.commissions-intro {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.commissions-intro h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 3.5vw, 2.6rem);
+  margin-bottom: 0.6rem;
+}
+
+.commissions-intro p {
+  opacity: 0.85;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.commission-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.commission-card {
+  background: rgba(10, 10, 30, 0.45);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 18px;
+  padding: 1.4rem;
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.commission-card header h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.4rem;
+  margin-bottom: 0.3rem;
+}
+
+.card-note {
+  opacity: 0.78;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.subtype,
+.examples {
+  margin-top: 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 0.6rem 0.8rem;
+}
+
+.subtype summary,
+.examples summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.subtype summary::-webkit-details-marker,
+.examples summary::-webkit-details-marker {
+  display: none;
+}
+
+.subtype summary::after,
+.examples summary::after {
+  content: "+";
+  font-weight: 600;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.subtype[open] summary::after,
+.examples[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.subtype-pill {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: #e9d5ff;
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem 0.8rem;
+  padding: 0.8rem 0.1rem 0.2rem;
+}
+
+.price-grid div:nth-child(odd) {
+  opacity: 0.8;
+}
+
+.price-grid div:nth-child(even) {
+  font-weight: 600;
+}
+
+.examples summary {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.example-grid {
+  margin-top: 0.6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.6rem;
+}
+
+.example-grid img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.example-note {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.addon-card {
+  margin-top: 2rem;
+  background: rgba(10, 10, 30, 0.45);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 18px;
+  padding: 1.2rem 1.4rem;
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.12);
+}
+
+.addon-card h3 {
+  font-family: "Playfair Display", serif;
+  margin-bottom: 0.6rem;
+}
+
+.addon-list {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem 1rem;
+}
+
+.addon-list div:nth-child(odd) {
+  opacity: 0.8;
+}
+
+.addon-list div:nth-child(even) {
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .commissions {
+    padding: 3rem 1.1rem 5rem;
+  }
+
+  .commission-card,
+  .addon-card {
+    padding: 1.1rem;
+  }
+}
