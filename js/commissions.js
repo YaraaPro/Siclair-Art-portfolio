@@ -41,6 +41,7 @@ const openModal = (thumb) => {
 thumbs.forEach((thumb) => {
   thumb.addEventListener("click", (event) => {
     event.preventDefault();
+    event.stopPropagation();
     openModal(thumb);
   });
 });
