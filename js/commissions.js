@@ -4,6 +4,7 @@ const modal = document.querySelector("#thumb-modal");
 const modalImage = modal ? modal.querySelector(".thumb-modal-image") : null;
 const closeModalButton = modal ? modal.querySelector(".thumb-modal-close") : null;
 const thumbs = document.querySelectorAll(".subtype-thumb");
+const exampleImages = document.querySelectorAll(".example-grid img");
 
 const closeModal = () => {
   if (!modal || !modalImage) {
@@ -15,17 +16,19 @@ const closeModal = () => {
   document.body.classList.remove("modal-open");
 };
 
-const openModal = (thumb) => {
+const openModal = (element) => {
   if (!modal || !modalImage) {
     return;
   }
-  const dataImage = thumb.getAttribute("data-full");
+  const dataImage = element.getAttribute("data-full");
   let background = "";
 
   if (dataImage) {
     background = `url("${dataImage}")`;
+  } else if (element.tagName === "IMG") {
+    background = `url("${element.currentSrc || element.src}")`;
   } else {
-    background = getComputedStyle(thumb).backgroundImage;
+    background = getComputedStyle(element).backgroundImage;
   }
 
   if (!background || background === "none") {
@@ -43,6 +46,13 @@ thumbs.forEach((thumb) => {
     event.preventDefault();
     event.stopPropagation();
     openModal(thumb);
+  });
+});
+
+exampleImages.forEach((image) => {
+  image.addEventListener("click", (event) => {
+    event.preventDefault();
+    openModal(image);
   });
 });
 
