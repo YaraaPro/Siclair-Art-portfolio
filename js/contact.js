@@ -10,6 +10,9 @@ const orderPreview = document.querySelector("#order-preview");
 const orderEmailLink = document.querySelector("#order-email-link");
 const orderCopyButton = document.querySelector("#order-copy-button");
 const orderCopyStatus = document.querySelector("#order-copy-status");
+const primaryEmailLink = document.querySelector("#primary-email-link");
+const copyEmailButton = document.querySelector("#copy-email-button");
+const contactCopyStatus = document.querySelector("#contact-copy-status");
 
 const COMMISSION_CATALOG = {
   Graphite: {
@@ -163,6 +166,58 @@ const setCopyStatus = (value) => {
   orderCopyStatus.textContent = value;
 };
 
+const setContactCopyStatus = (value) => {
+  if (!contactCopyStatus) {
+    return;
+  }
+  contactCopyStatus.textContent = value;
+};
+
+const getPrimaryContactEmail = () => {
+  if (!orderForm) {
+    return "";
+  }
+  return (orderForm.getAttribute("data-order-email") || "").trim();
+};
+
+const syncPrimaryContactEmail = () => {
+  if (!primaryEmailLink) {
+    return;
+  }
+
+  const email = getPrimaryContactEmail();
+  if (!email) {
+    return;
+  }
+
+  primaryEmailLink.href = `mailto:${email}`;
+  primaryEmailLink.textContent = email;
+};
+
+const copyPrimaryEmail = async () => {
+  const email = getPrimaryContactEmail() || (primaryEmailLink ? primaryEmailLink.textContent.trim() : "");
+  if (!email) {
+    setContactCopyStatus("No email configured.");
+    return;
+  }
+
+  try {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      await navigator.clipboard.writeText(email);
+    } else {
+      const tempInput = document.createElement("input");
+      tempInput.value = email;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+    }
+    setContactCopyStatus("Email copied.");
+  } catch (_) {
+    setContactCopyStatus("Could not copy automatically.");
+  }
+};
+
 const copyPreviewText = async () => {
   if (!orderPreview || !orderPreview.value.trim()) {
     setCopyStatus("Generate a request before copying.");
@@ -288,4 +343,13 @@ const initializeOrderForm = () => {
   }
 };
 
+const initializeContactMethods = () => {
+  syncPrimaryContactEmail();
+
+  if (copyEmailButton) {
+    copyEmailButton.addEventListener("click", copyPrimaryEmail);
+  }
+};
+
+initializeContactMethods();
 initializeOrderForm();
