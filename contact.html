@@ -10,9 +10,8 @@
   <link rel="stylesheet" href="css/contact.css" />
 </head>
 <body>
-    
   <header class="navbar">
-    <h1 class="logo"> Contact Moony</h1>
+    <h1 class="logo">Contact Moony</h1>
     <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
       <span class="nav-toggle-orbit" aria-hidden="true"></span>
       <span class="nav-toggle-line" aria-hidden="true"></span>
@@ -30,15 +29,118 @@
   </header>
 
   <main>
-   <canvas id="starfield"></canvas>
-<div id="nebula-overlay" aria-hidden="true"></div>
+    <canvas id="starfield"></canvas>
+    <div id="nebula-overlay" aria-hidden="true"></div>
 
- <footer id="site-footer">
-  <p>✨I hope you enjoy your visit!✨</p>
-  <button id="ambience-toggle" aria-pressed="true">
-  ✨ Ambience: On
-</button>
-</footer>
+    <section class="contact-wrap">
+      <header class="contact-intro reveal">
+        <h2>Commission Orders</h2>
+        <p>Submit your request below and send the generated message by email or DM.</p>
+      </header>
+
+      <section class="contact-order-card reveal" id="commission-order">
+        <h3>Order a Commission</h3>
+        <p class="order-note">Choose your style, add references, then generate your order text.</p>
+
+        <form id="commission-order-form" class="order-form" data-order-email="moondarlingcomm@gmail.com">
+          <div class="order-fields">
+            <label class="order-field">
+              <span>Name *</span>
+              <input type="text" name="clientName" autocomplete="name" required />
+            </label>
+
+            <label class="order-field">
+              <span>Contact handle *</span>
+              <input
+                type="text"
+                name="contactHandle"
+                placeholder="Email / Discord / Instagram"
+                autocomplete="email"
+                required
+              />
+            </label>
+
+            <label class="order-field">
+              <span>Medium *</span>
+              <select name="medium" id="order-medium" required></select>
+            </label>
+
+            <label class="order-field">
+              <span>Style *</span>
+              <select name="subtype" id="order-subtype" required></select>
+            </label>
+
+            <label class="order-field">
+              <span>Framing *</span>
+              <select name="size" id="order-size" required>
+                <option value="bust">Bust</option>
+                <option value="halfbody">Halfbody</option>
+                <option value="fullbody">Fullbody</option>
+              </select>
+            </label>
+
+            <label class="order-field">
+              <span>Preferred deadline</span>
+              <input type="date" name="deadline" />
+            </label>
+
+            <fieldset class="order-field order-field-full addon-options">
+              <legend>Add-ons</legend>
+              <label>
+                <input type="checkbox" name="addons" value="Simple background (+$5)" data-flat="5" />
+                <span>Simple background (+$5)</span>
+              </label>
+              <label>
+                <input type="checkbox" name="addons" value="Detailed background (+$10)" data-flat="10" />
+                <span>Detailed background (+$10)</span>
+              </label>
+              <label>
+                <input type="checkbox" name="addons" value="Extra character (+50%)" data-percent="0.5" />
+                <span>Extra character (+50%)</span>
+              </label>
+            </fieldset>
+
+            <label class="order-field order-field-full">
+              <span>Reference links</span>
+              <textarea
+                name="references"
+                rows="3"
+                placeholder="Paste links to references, pose sheets, or moodboard"
+              ></textarea>
+            </label>
+
+            <label class="order-field order-field-full">
+              <span>Extra notes</span>
+              <textarea
+                name="notes"
+                rows="4"
+                placeholder="Character details, expression, theme, background notes, etc."
+              ></textarea>
+            </label>
+          </div>
+
+          <p id="order-estimate" class="order-estimate" aria-live="polite"></p>
+          <button type="submit" class="order-submit">Generate Order Request</button>
+        </form>
+
+        <div id="order-result" class="order-result" hidden>
+          <p class="order-result-title">Order request ready</p>
+          <textarea id="order-preview" class="order-preview" rows="11" readonly></textarea>
+          <div class="order-actions">
+            <a id="order-email-link" class="order-action-btn" href="#">Open Email Draft</a>
+            <button id="order-copy-button" class="order-action-btn order-action-secondary" type="button">
+              Copy Request
+            </button>
+          </div>
+          <p id="order-copy-status" class="order-copy-status" aria-live="polite"></p>
+        </div>
+      </section>
+    </section>
+
+    <footer id="site-footer">
+      <p>&#10024;I hope you enjoy your visit!&#10024;</p>
+      <button id="ambience-toggle" aria-pressed="true">&#10024; Ambience: On</button>
+    </footer>
   </main>
 
   <script src="js/base.js"></script>

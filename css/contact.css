@@ -1,1 +1,210 @@
 /* Contact page styles */
+
+.contact-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 7rem;
+}
+
+.contact-intro {
+  text-align: center;
+  margin-bottom: 1.3rem;
+}
+
+.contact-intro h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 3.5vw, 2.6rem);
+  margin-bottom: 0.6rem;
+}
+
+.contact-intro p {
+  opacity: 0.85;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.contact-order-card {
+  margin-top: 2rem;
+  background: rgba(10, 10, 30, 0.45);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 18px;
+  padding: 1.4rem;
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.12);
+}
+
+.contact-order-card h3 {
+  font-family: "Playfair Display", serif;
+  margin-bottom: 0.4rem;
+}
+
+.order-note {
+  opacity: 0.82;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.order-form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.order-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.order-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.order-field span,
+.order-field legend {
+  font-size: 0.85rem;
+  opacity: 0.86;
+}
+
+.order-field input,
+.order-field select,
+.order-field textarea {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 10px;
+  color: #f5f3ff;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+}
+
+.order-field input::placeholder,
+.order-field textarea::placeholder {
+  color: rgba(226, 232, 240, 0.55);
+}
+
+.order-field textarea {
+  resize: vertical;
+  min-height: 84px;
+}
+
+.order-field input:focus-visible,
+.order-field select:focus-visible,
+.order-field textarea:focus-visible {
+  outline: 2px solid rgba(139, 92, 246, 0.8);
+  outline-offset: 2px;
+}
+
+.order-field-full {
+  grid-column: 1 / -1;
+}
+
+.addon-options {
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem 0.8rem;
+}
+
+.addon-options label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+  cursor: pointer;
+}
+
+.addon-options input[type="checkbox"] {
+  width: auto;
+  margin-top: 0.15rem;
+}
+
+.order-estimate {
+  min-height: 1.3rem;
+  font-size: 0.92rem;
+  color: #ddd6fe;
+  opacity: 0.95;
+}
+
+.order-submit,
+.order-action-btn {
+  appearance: none;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  background: linear-gradient(120deg, rgba(139, 92, 246, 0.36), rgba(59, 130, 246, 0.3));
+  color: #f8f7ff;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.order-submit:hover,
+.order-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(76, 29, 149, 0.25);
+}
+
+.order-submit {
+  justify-self: start;
+  padding: 0.58rem 1rem;
+}
+
+.order-result {
+  margin-top: 1rem;
+  border-top: 1px solid rgba(139, 92, 246, 0.28);
+  padding-top: 0.95rem;
+}
+
+.order-result-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.order-preview {
+  width: 100%;
+  background: rgba(6, 8, 18, 0.75);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 12px;
+  color: #f5f3ff;
+  padding: 0.75rem;
+  font: inherit;
+  line-height: 1.42;
+  resize: vertical;
+}
+
+.order-actions {
+  margin-top: 0.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.order-action-btn {
+  padding: 0.5rem 0.85rem;
+}
+
+.order-action-secondary {
+  background: rgba(30, 41, 59, 0.55);
+}
+
+.order-copy-status {
+  margin-top: 0.6rem;
+  min-height: 1.2rem;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+@media (max-width: 700px) {
+  .contact-wrap {
+    padding: 3rem 1.1rem 6rem;
+  }
+
+  .contact-order-card {
+    padding: 1.1rem;
+  }
+
+  .order-fields {
+    grid-template-columns: 1fr;
+  }
+}

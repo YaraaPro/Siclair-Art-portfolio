@@ -305,9 +305,61 @@ const setupExampleCarousel = (grid) => {
   updateArrows();
 };
 
+const buildContactOrderLink = (medium, subtype) => {
+  const params = new URLSearchParams();
+  if (medium) {
+    params.set("medium", medium);
+  }
+  if (subtype) {
+    params.set("style", subtype);
+  }
+  return `contact.html?${params.toString()}#commission-order`;
+};
+
+const attachQuickOrderButtons = () => {
+  const cards = document.querySelectorAll(".commission-card");
+
+  cards.forEach((card) => {
+    const medium = card.querySelector("header h3")?.textContent?.trim() || "";
+    if (!medium) {
+      return;
+    }
+
+    const subtypes = card.querySelectorAll(".subtype");
+    subtypes.forEach((subtypeElement) => {
+      if (subtypeElement.querySelector(".subtype-order-btn")) {
+        return;
+      }
+
+      const subtype =
+        subtypeElement.querySelector(".subtype-row span:not(.subtype-pill)")?.textContent?.trim() || "";
+      if (!subtype) {
+        return;
+      }
+
+      const orderButton = document.createElement("button");
+      orderButton.type = "button";
+      orderButton.className = "subtype-order-btn";
+      orderButton.textContent = "Order This Style";
+      orderButton.addEventListener("click", () => {
+        window.location.href = buildContactOrderLink(medium, subtype);
+      });
+
+      const priceGrid = subtypeElement.querySelector(".price-grid");
+      if (priceGrid && priceGrid.parentElement === subtypeElement) {
+        priceGrid.insertAdjacentElement("afterend", orderButton);
+        return;
+      }
+
+      subtypeElement.appendChild(orderButton);
+    });
+  });
+};
+
 exampleGrids.forEach((grid) => {
   setupExampleCarousel(grid);
 });
+attachQuickOrderButtons();
 
 thumbs.forEach((thumb) => {
   thumb.addEventListener("click", (event) => {
