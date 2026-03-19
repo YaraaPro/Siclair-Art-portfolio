@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -10,9 +10,8 @@
   <link rel="stylesheet" href="css/ocs.css" />
 </head>
 <body>
-    
   <header class="navbar">
-    <h1 class="logo">Moony's Ocs</h1>
+    <h1 class="logo">Moony's OCs</h1>
     <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
       <span class="nav-toggle-orbit" aria-hidden="true"></span>
       <span class="nav-toggle-line" aria-hidden="true"></span>
@@ -30,18 +29,61 @@
   </header>
 
   <main>
-   <canvas id="starfield"></canvas>
-<div id="nebula-overlay" aria-hidden="true"></div>
+    <canvas id="starfield"></canvas>
+    <div id="nebula-overlay" aria-hidden="true"></div>
 
- <footer id="site-footer">
-  <p>✨I hope you enjoy your visit!✨</p>
-  <button id="ambience-toggle" aria-pressed="true">
-  ✨ Ambience: On
-</button>
-</footer>
+    <section class="ocs">
+      <header class="ocs-intro reveal">
+        <h2>Original Characters</h2>
+        <p>Browse, filter, and open profiles to explore their backstories and how they connect.</p>
+      </header>
+
+      <div class="ocs-controls reveal" aria-label="OC filters">
+        <div class="search-box">
+          <label for="ocs-search" class="sr-only">Search characters</label>
+          <input id="ocs-search" type="search" placeholder="Search names, roles, tags..." autocomplete="off" />
+        </div>
+        <div class="select-box">
+          <label for="ocs-storyline" class="sr-only">Filter by storyline</label>
+          <select id="ocs-storyline">
+            <option value="all">All storylines</option>
+          </select>
+        </div>
+        <div class="tag-pills" id="ocs-tag-pills" aria-label="Tag filters"></div>
+        <button id="ocs-clear" class="clear-btn" type="button">Clear filters</button>
+      </div>
+
+      <section id="ocs-grid" class="ocs-grid" aria-live="polite"></section>
+    </section>
+
+    <div id="oc-modal" class="oc-modal" aria-hidden="true" role="dialog" aria-label="Character profile">
+      <div class="oc-modal-panel">
+        <button id="oc-modal-close" class="oc-modal-close" type="button" aria-label="Close profile">×</button>
+        <div class="oc-modal-header">
+          <div class="oc-modal-avatar" id="oc-modal-avatar" aria-hidden="true"></div>
+          <div>
+            <p class="oc-modal-role" id="oc-modal-role"></p>
+            <h3 id="oc-modal-name"></h3>
+            <div class="oc-modal-tags" id="oc-modal-tags"></div>
+          </div>
+        </div>
+        <p class="oc-modal-blurb" id="oc-modal-blurb"></p>
+        <div class="oc-modal-sections" id="oc-modal-sections"></div>
+        <div class="oc-modal-connections" id="oc-modal-connections"></div>
+      </div>
+    </div>
+
+    <footer id="site-footer">
+      <p>&#10024;I hope you enjoy your visit!&#10024;</p>
+      <button id="ambience-toggle" aria-pressed="true">&#10024; Ambience: On</button>
+    </footer>
   </main>
 
   <script src="js/base.js"></script>
   <script src="js/ocs.js"></script>
 </body>
 </html>
+
+
+
+

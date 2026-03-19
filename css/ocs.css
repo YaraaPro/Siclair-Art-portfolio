@@ -1,1 +1,430 @@
-/* OCs page styles */
+﻿/* OCs page styles */
+
+.ocs {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 7rem;
+}
+
+.ocs-intro {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.ocs-intro h2 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.1rem, 3.6vw, 2.8rem);
+  margin-bottom: 0.5rem;
+}
+
+.ocs-intro p {
+  opacity: 0.85;
+  max-width: 720px;
+  margin: 0.2rem auto 0;
+  line-height: 1.6;
+}
+
+.ocs-controls {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.search-box input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 12px;
+  color: #f5f3ff;
+  padding: 0.65rem 0.8rem;
+  font: inherit;
+}
+
+.search-box input::placeholder {
+  color: rgba(226, 232, 240, 0.6);
+}
+
+.select-box select {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 12px;
+  color: #f5f3ff;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+}
+
+.tag-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag-pill {
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: rgba(139, 92, 246, 0.18);
+  color: #f5f3ff;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.tag-pill.active {
+  background: linear-gradient(120deg, rgba(139, 92, 246, 0.55), rgba(59, 130, 246, 0.45));
+  box-shadow: 0 6px 16px rgba(76, 29, 149, 0.25);
+}
+
+.tag-pill:hover {
+  transform: translateY(-1px);
+}
+
+.clear-btn {
+  justify-self: start;
+  appearance: none;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(30, 41, 59, 0.55);
+  color: #f5f3ff;
+  border-radius: 10px;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+
+.ocs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.oc-card {
+  background: rgba(10, 10, 30, 0.5);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.12);
+  display: grid;
+  gap: 0.65rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.oc-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(6, 8, 22, 0.4);
+}
+
+.oc-highlight {
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.7), 0 12px 28px rgba(6, 8, 22, 0.4);
+}
+
+.oc-card-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.oc-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.35), rgba(59, 130, 246, 0.25)),
+    rgba(15, 23, 42, 0.75);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.oc-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.oc-avatar::after,
+.oc-modal-avatar::after {
+  content: attr(data-initials);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #f8f7ff;
+  letter-spacing: 0.04em;
+}
+
+.oc-avatar.has-image::after,
+.oc-modal-avatar.has-image::after {
+  display: none;
+}
+
+.oc-name {
+  font-family: "Playfair Display", serif;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.oc-role {
+  margin: 0;
+  opacity: 0.75;
+}
+
+.oc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.oc-tag {
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.78rem;
+  color: #e9d5ff;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.oc-blurb {
+  margin: 0;
+  opacity: 0.88;
+  line-height: 1.5;
+}
+
+.oc-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.oc-open-btn {
+  appearance: none;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  background: linear-gradient(120deg, rgba(139, 92, 246, 0.4), rgba(59, 130, 246, 0.35));
+  color: #f8f7ff;
+  border-radius: 10px;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.oc-open-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(76, 29, 149, 0.25);
+}
+
+.oc-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 18, 0.8);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 900;
+}
+
+.oc-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.oc-modal-panel {
+  width: min(900px, 92vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: rgba(10, 10, 30, 0.9);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 18px;
+  padding: 1.4rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  position: relative;
+}
+
+.oc-modal-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(30, 41, 59, 0.55);
+  color: #f5f3ff;
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.oc-modal-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.oc-modal-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 16px;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.35), rgba(59, 130, 246, 0.25)),
+    rgba(15, 23, 42, 0.75);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.oc-modal-role {
+  margin: 0;
+  opacity: 0.75;
+}
+
+.oc-modal h3 {
+  margin: 0.15rem 0;
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+}
+
+.oc-modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.oc-modal-tags .oc-tag {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.oc-modal-blurb {
+  margin: 0.2rem 0 0.8rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.oc-modal-sections {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.oc-modal-section {
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.oc-modal-section summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.8rem 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.oc-modal-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.oc-modal-section summary::after {
+  content: "+";
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+.oc-modal-section[open] summary::after {
+  content: "-";
+}
+
+.oc-modal-section-body {
+  padding: 0 0.95rem 0.95rem;
+}
+
+.oc-modal-story h4,
+.oc-modal-section h4 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.oc-modal-story p,
+.oc-modal-section-body p {
+  margin: 0 0 0.8rem;
+  line-height: 1.6;
+  opacity: 0.92;
+}
+
+.oc-modal-section-body p:last-child {
+  margin-bottom: 0;
+}
+
+.oc-modal-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.45rem;
+  line-height: 1.55;
+  opacity: 0.92;
+}
+
+.oc-modal-connections {
+  border-top: 1px solid rgba(139, 92, 246, 0.28);
+  padding-top: 0.8rem;
+}
+
+.oc-connection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.oc-connection a {
+  color: #c4b5fd;
+  text-decoration: none;
+}
+
+.oc-connection a:hover {
+  text-decoration: underline;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 700px) {
+  .ocs {
+    padding: 3rem 1.1rem 6rem;
+  }
+
+  .ocs-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .oc-card-header,
+  .oc-modal-header {
+    grid-template-columns: 1fr;
+  }
+
+  .clear-btn {
+    justify-self: stretch;
+    text-align: center;
+  }
+}
+
